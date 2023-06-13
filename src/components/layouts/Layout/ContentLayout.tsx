@@ -20,4 +20,4 @@ export const ContentLayout = ({ children, pageTitle }: Props): JSX.Element => {
   );
 };
 
-ContentLayout.displayName = "Main";
+ContentLayout.displayName = "ContentLayout";

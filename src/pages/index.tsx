@@ -1,9 +1,10 @@
 import { ContentLayout } from "@/components/layouts";
+import { Home } from "@/feature/home";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <ContentLayout pageTitle="Home">
-      <div>Hello World</div>
+    <ContentLayout pageTitle="MyPage">
+      <Home />
     </ContentLayout>
   );
 }

@@ -39,7 +39,7 @@ export const Layout = ({ children }: Props) => {
 
       <Header onClick={onMenuClick} />
 
-      <main>{children}</main>
+      <main className={clsx("mx-4")}>{children}</main>
 
       <Footer />
     </>
