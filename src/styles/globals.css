@@ -23,3 +23,8 @@ h1 {
 body {
   margin: 0;
 }
+
+/* NOTE: Modal が Calendar と重ならないように対応 */
+.ReactModal__Overlay {
+  z-index: 9999;
+}

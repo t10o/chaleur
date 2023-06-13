@@ -1,13 +1,28 @@
 import { DateClickArg } from "@fullcalendar/interaction";
+import { useState } from "react";
 
-import { Calender } from "@/components/elements";
+import { Calender, Modal } from "@/components/elements";
 
 export const Home = () => {
-  const handleClick = (arg: DateClickArg) => {
-    console.log(arg.dateStr);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleDateClick = (arg: DateClickArg) => {
+    setIsOpen(true);
   };
 
-  return <Calender onDateClick={handleClick} />;
+  const handleModalClose = () => {
+    setIsOpen(false);
+  };
+
+  return (
+    <>
+      <Calender onDateClick={handleDateClick} />
+
+      <Modal isOpen={isOpen} onRequestClose={handleModalClose}>
+        <div>modal</div>
+      </Modal>
+    </>
+  );
 };
 
 Home.displayName = "Home";
