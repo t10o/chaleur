@@ -10,7 +10,7 @@ interface Props {
   onChange?: (value: string) => void;
 }
 
-export const ToggleGroup = React.forwardRef<HTMLInputElement, Props>(
+export const ToggleGroup = React.forwardRef<HTMLDivElement, Props>(
   ({ className, children, value, defaultValue, onChange }: Props, ref) => {
     return (
       <RadixToggleGroup.Root
