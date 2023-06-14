@@ -54,8 +54,8 @@ export const PachisloForm = () => {
         name="kind"
         defaultValue="パチンコ"
       >
-        <ToggleItem value="パチンコ" />
-        <ToggleItem value="スロット" />
+        <ToggleItem value="pachinko" label="パチンコ" />
+        <ToggleItem value="slot" label="スロット" />
       </FormToggle>
 
       <label htmlFor="machine">台</label>
