@@ -6,7 +6,7 @@ import { PaymentRegisterForm } from "@/feature/home/form/PaymentRegisterForm";
 
 export const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date>();
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   const handleDateClick = (arg: DateClickArg) => {
     setSelectedDate(arg.date);
