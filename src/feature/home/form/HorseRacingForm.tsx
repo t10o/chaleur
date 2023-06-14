@@ -26,7 +26,6 @@ export const HorseRacingForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div></div>
       <label htmlFor="racecourse">会場</label>
       <Input
         id="racecourse"
