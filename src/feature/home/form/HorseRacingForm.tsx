@@ -1,8 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import * as z from "zod";
 
 import { Button, Input, Textarea } from "@/components/elements";
@@ -24,13 +22,6 @@ export const HorseRacingForm = () => {
     resolver: zodResolver(schema),
   });
 
-  useEffect(() => {
-    errors.racecourse && toast.error(errors.racecourse.message as string);
-    errors.race && toast.error(errors.race.message as string);
-    errors.pay && toast.error(errors.pay.message as string);
-    errors.payback && toast.error(errors.payback.message as string);
-  }, [errors]);
-
   const onSubmit = () => {};
 
   return (
@@ -39,30 +30,50 @@ export const HorseRacingForm = () => {
       <label htmlFor="racecourse">会場</label>
       <Input
         id="racecourse"
-        className={clsx("w-full", "mb-4")}
+        className={clsx("w-full", !errors.racecourse && "mb-4")}
         {...register("kind", { required: true })}
       />
+      {errors.racecourse && (
+        <p className={clsx("mb-4", "text-sm", "text-red-500")}>
+          ※{errors.racecourse.message as string}
+        </p>
+      )}
 
       <label htmlFor="race">レース</label>
       <Input
         id="race"
-        className={clsx("w-full", "mb-4")}
+        className={clsx("w-full", !errors.race && "mb-4")}
         {...register("kind", { required: true })}
       />
+      {errors.race && (
+        <p className={clsx("mb-4", "text-sm", "text-red-500")}>
+          ※{errors.race.message as string}
+        </p>
+      )}
 
       <label htmlFor="pay">投資</label>
       <Input
         id="pay"
-        className={clsx("w-full", "mb-4")}
+        className={clsx("w-full", !errors.pay && "mb-4")}
         {...register("pay", { required: true })}
       />
+      {errors.pay && (
+        <p className={clsx("mb-4", "text-sm", "text-red-500")}>
+          ※{errors.pay.message as string}
+        </p>
+      )}
 
       <label htmlFor="payback">回収</label>
       <Input
         id="payback"
-        className={clsx("w-full", "mb-4")}
+        className={clsx("w-full", !errors.payback && "mb-4")}
         {...register("payback", { required: true })}
       />
+      {errors.payback && (
+        <p className={clsx("mb-4", "text-sm", "text-red-500")}>
+          ※{errors.payback.message as string}
+        </p>
+      )}
 
       <label htmlFor="memo">メモ</label>
       <Textarea
