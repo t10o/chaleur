@@ -52,7 +52,7 @@ export const PachisloForm = () => {
         className={clsx("w-full", "mb-4")}
         control={control}
         name="kind"
-        defaultValue="パチンコ"
+        defaultValue="pachinko"
       >
         <ToggleItem value="pachinko" label="パチンコ" />
         <ToggleItem value="slot" label="スロット" />
