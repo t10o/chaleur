@@ -4,12 +4,13 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 
 import type { AppProps } from "next/app";
 import { ToastContainer } from "react-toastify";
+import { RecoilRoot } from "recoil";
 
 import { Layout } from "@/components/layouts";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <RecoilRoot>
       <title>chaleur</title>
 
       <ToastContainer
@@ -28,6 +29,6 @@ export default function App({ Component, pageProps }: AppProps) {
       <Layout>
         <Component {...pageProps} />
       </Layout>
-    </>
+    </RecoilRoot>
   );
 }

@@ -3,10 +3,12 @@ import clsx from "clsx";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
+import { useSetRecoilState } from "recoil";
 import * as z from "zod";
 
 import { Button, Input } from "@/components/elements";
 import { supabase } from "@/lib/supabaseClient";
+import { AuthState, authState } from "@/stores/auth";
 
 interface SigninForm {
   email: string;
@@ -32,16 +34,24 @@ export const Signin = () => {
 
   const router = useRouter();
 
+  const setUser = useSetRecoilState<AuthState>(authState);
+
   const onSubmit = async (data: SigninForm) => {
     try {
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: data.email,
-        password: data.password,
-      });
+      const { data: loginUser, error: signInError } =
+        await supabase.auth.signInWithPassword({
+          email: data.email,
+          password: data.password,
+        });
 
       if (signInError) {
         throw signInError;
       }
+
+      console.log(loginUser.user);
+      console.log(loginUser.session);
+
+      setUser({ user: loginUser.user, session: loginUser.session });
 
       await router.push("/");
     } catch (error) {
