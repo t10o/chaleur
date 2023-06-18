@@ -1,7 +1,8 @@
+import { ToggleButton } from "@mui/material";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import clsx from "clsx";
 import { useState } from "react";
 
-import { ToggleGroup, ToggleItem } from "@/components/elements";
 import { HorseRacingForm } from "@/feature/home/form/HorseRacingForm";
 import { PachisloForm } from "@/feature/home/form/PachisloForm";
 import { format } from "@/utils/date";
@@ -15,8 +16,11 @@ export const PaymentRegisterForm = ({ date }: Props) => {
 
   const isPachislo = gamble === "pachislo";
 
-  const handleChange = (gamble: string) => {
-    setGamble(gamble);
+  const handleChange = (
+    event: React.MouseEvent<HTMLElement>,
+    value: string
+  ) => {
+    setGamble(value);
   };
 
   return (
@@ -34,20 +38,23 @@ export const PaymentRegisterForm = ({ date }: Props) => {
         {format(date)}
       </p>
 
-      <ToggleGroup
+      <ToggleButtonGroup
         className={clsx("flex", "justify-center", "items-center", "mb-8")}
-        defaultValue="pachislo"
+        value={gamble}
+        exclusive
+        color="primary"
         onChange={handleChange}
       >
-        <ToggleItem
-          className={clsx("w-32")}
-          value="pachislo"
-          label="パチスロ"
-        />
-        <ToggleItem className={clsx("w-32")} value="horserace" label="競馬" />
-      </ToggleGroup>
+        <ToggleButton className={clsx("w-32")} value="pachislo">
+          パチスロ
+        </ToggleButton>
 
-      {isPachislo ? <PachisloForm /> : <HorseRacingForm />}
+        <ToggleButton className={clsx("w-32")} value="horserace">
+          競馬
+        </ToggleButton>
+      </ToggleButtonGroup>
+
+      {isPachislo ? <PachisloForm date={date} /> : <HorseRacingForm />}
     </>
   );
 };

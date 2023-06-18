@@ -1,16 +1,29 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ToggleButton } from "@mui/material";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import clsx from "clsx";
-import { useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { useRecoilValue } from "recoil";
 import * as z from "zod";
 
-import { Button, Textarea, ToggleItem } from "@/components/elements";
+import { Button, Textarea } from "@/components/elements";
 import { Input } from "@/components/elements/Input";
-import { FormToggle } from "@/components/elements/Toggle/FormToggle";
+import { useMachineMaster } from "@/hooks/use-machine-master";
+import { usePachislo } from "@/hooks/use-pachislo";
+import { usePayments } from "@/hooks/use-payments";
+import { useShopMaster } from "@/hooks/use-shop-master";
+import { PachisloFormValue } from "@/models/pachislo";
+import { AuthState, authState } from "@/stores/auth";
 
-export const PachisloForm = () => {
+interface Props {
+  date: Date;
+}
+
+export const PachisloForm = ({ date }: Props) => {
   const schema = z.object({
     shop: z.string().min(1, { message: "店を入力してください。" }),
     machine: z.string().min(1, { message: "台を入力してください" }),
+    kind: z.string(),
     pay: z.string().min(1, { message: "投資を入力してください" }),
     payback: z.string().min(1, { message: "回収を入力してください" }),
   });
@@ -19,13 +32,78 @@ export const PachisloForm = () => {
     formState: { errors },
     handleSubmit,
     register,
-    reset,
     control,
-  } = useForm({
+  } = useForm<PachisloFormValue>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      kind: "pachinko",
+    },
   });
 
-  const onSubmit = () => {};
+  const {
+    machineMaster,
+    machineNames,
+    error: machineError,
+    insertMachineMaster,
+  } = useMachineMaster();
+
+  const {
+    shopMaster,
+    shopNames,
+    error: shopError,
+    insertShopMaster,
+  } = useShopMaster();
+
+  const { insertPachoslo } = usePachislo();
+
+  const { insertPaymentForPachoslo } = usePayments();
+
+  const auth = useRecoilValue<AuthState>(authState);
+
+  if (machineError || !machineNames || !machineMaster) {
+    return <div>Error: Machine Master Fetch Failed</div>;
+  }
+
+  if (shopError || !shopNames || !shopMaster) {
+    return <div>Error: Shop Master Fetch Failed</div>;
+  }
+
+  const onSubmit: SubmitHandler<PachisloFormValue> = async (
+    data: PachisloFormValue
+  ) => {
+    try {
+      if (!machineNames.includes(data.machine)) {
+        const error = await insertMachineMaster(data.machine, data.kind);
+
+        if (error) throw error;
+      }
+
+      if (!shopNames.includes(data.shop)) {
+        const error = await insertShopMaster(data.shop);
+
+        if (error) throw error;
+      }
+
+      const { data: pachisloData, error: pachisloError } = await insertPachoslo(
+        data,
+        machineMaster,
+        shopMaster
+      );
+
+      if (pachisloError) throw pachisloError;
+
+      const { error } = await insertPaymentForPachoslo(
+        data,
+        pachisloData![0].id,
+        date,
+        auth.user.id
+      );
+
+      if (error) throw error;
+    } catch (error: any) {
+      alert(error.message);
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -41,16 +119,22 @@ export const PachisloForm = () => {
         </p>
       )}
 
-      <label htmlFor="kind">種類</label>
-      <FormToggle
-        className={clsx("w-full", "mb-4")}
-        control={control}
-        name="kind"
-        defaultValue="pachinko"
-      >
-        <ToggleItem value="pachinko" label="パチンコ" />
-        <ToggleItem value="slot" label="スロット" />
-      </FormToggle>
+      <div className={clsx("flex", "flex-col", "mb-4")}>
+        <label htmlFor="kind">種類</label>
+        <Controller
+          name="kind"
+          control={control}
+          render={({ field }) => {
+            return (
+              <ToggleButtonGroup {...field} exclusive color="primary">
+                <ToggleButton value="pachinko">パチンコ</ToggleButton>
+
+                <ToggleButton value="slot">スロット</ToggleButton>
+              </ToggleButtonGroup>
+            );
+          }}
+        />
+      </div>
 
       <label htmlFor="machine">台</label>
       <Input
