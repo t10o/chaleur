@@ -10,6 +10,8 @@
     "typegen": "supabase gen types typescript --linked > src/types/schema.ts"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
     "@fortawesome/free-brands-svg-icons": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.3.0",
@@ -21,7 +23,7 @@
     "@fullcalendar/react": "^6.1.8",
     "@fullcalendar/timegrid": "^6.1.8",
     "@hookform/resolvers": "^3.0.1",
-    "@material-ui/core": "^4.12.4",
+    "@mui/material": "^5.13.5",
     "@supabase/supabase-js": "^2.25.0",
     "autoprefixer": "10.4.14",
     "eslint": "8.42.0",
