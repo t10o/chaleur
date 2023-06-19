@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 
 type Props = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-interface ButtonProps extends Props {
+export interface ButtonProps extends Props {
   children?: ReactNode;
   label?: string;
 }
