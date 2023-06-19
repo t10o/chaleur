@@ -54,7 +54,11 @@ export const PaymentRegisterForm = ({ date }: Props) => {
         </ToggleButton>
       </ToggleButtonGroup>
 
-      {isPachislo ? <PachisloForm date={date} /> : <HorseRacingForm />}
+      {isPachislo ? (
+        <PachisloForm date={date} />
+      ) : (
+        <HorseRacingForm date={date} />
+      )}
     </>
   );
 };

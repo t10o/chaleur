@@ -26,5 +26,5 @@ body {
 
 /* NOTE: Modal が Calendar と重ならないように対応 */
 .ReactModal__Overlay {
-  z-index: 9999;
+  z-index: 1000;
 }

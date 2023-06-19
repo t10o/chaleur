@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ToggleButton } from "@mui/material";
+import { InputLabel, ToggleButton } from "@mui/material";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import clsx from "clsx";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -107,7 +107,7 @@ export const PachisloForm = ({ date }: Props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <label htmlFor="shop">店</label>
+      <InputLabel id="shop">店</InputLabel>
       <Input
         id="shop"
         className={clsx("w-full", !errors.shop && "mb-4")}
@@ -120,7 +120,7 @@ export const PachisloForm = ({ date }: Props) => {
       )}
 
       <div className={clsx("flex", "flex-col", "mb-4")}>
-        <label htmlFor="kind">種類</label>
+        <InputLabel id="kind">種類</InputLabel>
         <Controller
           name="kind"
           control={control}
@@ -136,7 +136,7 @@ export const PachisloForm = ({ date }: Props) => {
         />
       </div>
 
-      <label htmlFor="machine">台</label>
+      <InputLabel id="machine">台</InputLabel>
       <Input
         id="machine"
         className={clsx("w-full", !errors.machine && "mb-4")}
@@ -148,7 +148,7 @@ export const PachisloForm = ({ date }: Props) => {
         </p>
       )}
 
-      <label htmlFor="pay">投資</label>
+      <InputLabel id="pay">投資</InputLabel>
       <Input
         id="pay"
         className={clsx("w-full", !errors.pay && "mb-4")}
@@ -160,7 +160,7 @@ export const PachisloForm = ({ date }: Props) => {
         </p>
       )}
 
-      <label htmlFor="payback">回収</label>
+      <InputLabel id="payback">回収</InputLabel>
       <Input
         id="payback"
         className={clsx("w-full", !errors.payback && "mb-4")}
@@ -172,7 +172,7 @@ export const PachisloForm = ({ date }: Props) => {
         </p>
       )}
 
-      <label htmlFor="memo">メモ</label>
+      <InputLabel id="memo">メモ</InputLabel>
       <Textarea
         id="memo"
         className={clsx("w-full", "mb-4")}
