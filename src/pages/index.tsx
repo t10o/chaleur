@@ -1,5 +1,5 @@
 import { ContentLayout } from "@/components/layouts";
-import { Home } from "@/feature/home";
+import { Home } from "@/features/home";
 
 export default function HomePage() {
   return (

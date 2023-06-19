@@ -2,7 +2,7 @@ import { DateClickArg } from "@fullcalendar/interaction";
 import { useState } from "react";
 
 import { Calender, Modal } from "@/components/elements";
-import { PaymentRegisterForm } from "@/feature/home/form/PaymentRegisterForm";
+import { PaymentRegisterForm } from "@/features/home/form/PaymentRegisterForm";
 
 export const Home = () => {
   const [isOpen, setIsOpen] = useState(false);

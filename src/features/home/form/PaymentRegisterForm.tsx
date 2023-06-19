@@ -3,8 +3,8 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import clsx from "clsx";
 import { useState } from "react";
 
-import { HorseRacingForm } from "@/feature/home/form/HorseRacingForm";
-import { PachisloForm } from "@/feature/home/form/PachisloForm";
+import { HorseRacingForm } from "@/features/home/form/HorseRacingForm";
+import { PachisloForm } from "@/features/home/form/PachisloForm";
 import { format } from "@/utils/date";
 
 interface Props {
