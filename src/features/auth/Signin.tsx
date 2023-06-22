@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
 import * as z from "zod";
 
-import { Button, Input } from "@/components/elements";
+import { Input, PrimaryButton } from "@/components/elements";
 import { supabase } from "@/lib/supabaseClient";
 import { AuthState, authState } from "@/stores/auth";
 
@@ -48,9 +48,6 @@ export const Signin = () => {
         throw signInError;
       }
 
-      console.log(loginUser.user);
-      console.log(loginUser.session);
-
       setUser({ user: loginUser.user, session: loginUser.session });
 
       await router.push("/");
@@ -87,13 +84,18 @@ export const Signin = () => {
         </p>
       )}
 
-      <Button
-        className={clsx("w-full", "text-lg")}
+      <PrimaryButton
+        className={clsx("w-full", "text-lg", "mb-4")}
         type="submit"
-        label="Submit"
+        label="サインイン"
       />
 
-      <Link href="/signup">ユーザー登録がお済みでない方はこちらから</Link>
+      <Link
+        className={clsx("flex", "justify-center", "items-center")}
+        href="/auth/signup"
+      >
+        ユーザー登録がお済みでない方はこちらから
+      </Link>
     </form>
   );
 };

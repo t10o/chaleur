@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { Button, Input } from "@/components/elements";
+import { Input, PrimaryButton } from "@/components/elements";
 import { supabase } from "@/lib/supabaseClient";
 
 interface SignupForm {
@@ -102,11 +102,13 @@ export const Signup = () => {
         </p>
       )}
 
-      <Button
+      <PrimaryButton
         className={clsx("w-full", "text-lg")}
         type="submit"
-        label="Submit"
+        label="サインアップ"
       />
     </form>
   );
 };
+
+Signup.displayName = "Signup";
