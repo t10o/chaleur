@@ -5,12 +5,15 @@ import Link from "next/link";
 
 import { Button } from "@/components/elements/Button";
 import { MENUS } from "@/constants/menus";
+import { useHeader } from "@/hooks/use-header";
 
 interface Props {
   onClick: () => void;
 }
 
-export const Header = ({ onClick }: Props): JSX.Element => {
+export const Header = ({ onClick }: Props) => {
+  const { isAuthorizeRequired } = useHeader();
+
   return (
     <header
       className={clsx(
@@ -26,23 +29,33 @@ export const Header = ({ onClick }: Props): JSX.Element => {
         <span className={clsx("text-4xl")}>chaleur</span>
       </Link>
 
-      <Button className={clsx("lg:hidden")} aria-label="Menu" onClick={onClick}>
-        <FontAwesomeIcon className={clsx("text-lg")} icon={faBars} />
-      </Button>
+      {!isAuthorizeRequired && (
+        <>
+          <Button
+            className={clsx("lg:hidden")}
+            aria-label="Menu"
+            onClick={onClick}
+          >
+            <FontAwesomeIcon className={clsx("text-lg")} icon={faBars} />
+          </Button>
 
-      <div className={clsx("lg:flex", "items-center", "hidden", "text-center")}>
-        {MENUS.map((menu) => {
-          return (
-            <Link
-              className={clsx("mx-4", "text-xl")}
-              key={menu.name}
-              href={menu.href}
-            >
-              {menu.name}
-            </Link>
-          );
-        })}
-      </div>
+          <div
+            className={clsx("lg:flex", "items-center", "hidden", "text-center")}
+          >
+            {MENUS.map((menu) => {
+              return (
+                <Link
+                  className={clsx("mx-4", "text-xl")}
+                  key={menu.name}
+                  href={menu.href}
+                >
+                  {menu.name}
+                </Link>
+              );
+            })}
+          </div>
+        </>
+      )}
     </header>
   );
 };
