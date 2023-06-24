@@ -1,8 +1,12 @@
-import { supabase } from "@/lib/supabaseClient";
+import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
+
 import { HorseraceFormValue } from "@/models/horserace";
 import { PachisloFormValue } from "@/models/pachislo";
+import { Database } from "@/types/schema";
 
 export const usePayments = () => {
+  const supabase = createPagesBrowserClient<Database>();
+
   const insertPaymentForPachoslo = async (
     value: PachisloFormValue,
     pachisloPaymentId: number,

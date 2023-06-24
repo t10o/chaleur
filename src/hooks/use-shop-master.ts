@@ -1,10 +1,13 @@
+import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { PostgrestError } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 
-import { supabase } from "@/lib/supabaseClient";
 import { ShopResponse } from "@/models/shop";
+import { Database } from "@/types/schema";
 
 export const useShopMaster = () => {
+  const supabase = createPagesBrowserClient<Database>();
+
   const [shopMaster, setShopMaster] = useState<ShopResponse[] | null>(null);
   const [shopNames, setShopNames] = useState<string[] | null>(null);
   const [error, setError] = useState<PostgrestError | null>(null);
@@ -30,8 +33,6 @@ export const useShopMaster = () => {
       .from("shop")
       .insert({ id, name: shopName })
       .select();
-
-    console.log(data);
 
     setShopMaster(data);
 

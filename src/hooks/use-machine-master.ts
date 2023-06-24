@@ -1,10 +1,13 @@
+import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { PostgrestError } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 
-import { supabase } from "@/lib/supabaseClient";
 import { MachineResponse } from "@/models/machine";
+import { Database } from "@/types/schema";
 
 export const useMachineMaster = () => {
+  const supabase = createPagesBrowserClient<Database>();
+
   const [machineMaster, setMachineMaster] = useState<MachineResponse[] | null>(
     null
   );

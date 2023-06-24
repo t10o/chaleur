@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import clsx from "clsx";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -7,8 +8,8 @@ import { useSetRecoilState } from "recoil";
 import * as z from "zod";
 
 import { Input, PrimaryButton } from "@/components/elements";
-import { supabase } from "@/lib/supabaseClient";
 import { AuthState, authState } from "@/stores/auth";
+import { Database } from "@/types/schema";
 
 interface SigninForm {
   email: string;
@@ -16,6 +17,8 @@ interface SigninForm {
 }
 
 export const Signin = () => {
+  const supabase = createPagesBrowserClient<Database>();
+
   const schema = z.object({
     email: z
       .string()

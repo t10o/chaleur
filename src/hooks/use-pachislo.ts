@@ -1,9 +1,13 @@
-import { supabase } from "@/lib/supabaseClient";
+import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
+
 import { MachineResponse } from "@/models/machine";
 import { PachisloFormValue } from "@/models/pachislo";
 import { ShopResponse } from "@/models/shop";
+import { Database } from "@/types/schema";
 
 export const usePachislo = () => {
+  const supabase = createPagesBrowserClient<Database>();
+
   const insertPachoslo = async (
     value: PachisloFormValue,
     machineMaster: MachineResponse[],

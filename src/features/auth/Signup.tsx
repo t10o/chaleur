@@ -1,10 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import clsx from "clsx";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Input, PrimaryButton } from "@/components/elements";
-import { supabase } from "@/lib/supabaseClient";
+import { Database } from "@/types/schema";
 
 interface SignupForm {
   email: string;
@@ -13,6 +14,8 @@ interface SignupForm {
 }
 
 export const Signup = () => {
+  const supabase = createPagesBrowserClient<Database>();
+
   const schema = z
     .object({
       email: z
