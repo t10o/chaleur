@@ -23,7 +23,7 @@ export const usePachislo = () => {
     const shopId = targetShop[0].id;
 
     const { data, error } = await supabase
-      .from("pachislo_payment")
+      .from("pachislo_payments")
       .insert({ shop: shopId, kind: value.kind, machine: machineId })
       .select();
 

@@ -5,12 +5,17 @@ import { useEffect, useState } from "react";
 import { CalendarEvent } from "@/components/elements";
 import { HorseraceFormValue } from "@/models/horserace";
 import { PachisloFormValue } from "@/models/pachislo";
+import { PaymentsResponse } from "@/models/payments";
 import { Database } from "@/types/schema";
 
 export const usePayments = (date: Date) => {
   const supabase = createPagesBrowserClient<Database>();
 
   const [monthPayments, setMonthPayments] = useState<PaymentsResponse[] | null>(
+    null
+  );
+
+  const [dayPayments, setDayPayments] = useState<PaymentsResponse[] | null>(
     null
   );
 
@@ -27,13 +32,21 @@ export const usePayments = (date: Date) => {
 
       const { data, error } = await supabase
         .from("payments")
-        .select("*")
+        .select(
+          "*, pachislo_payments(*, machine(*), shop(*)), horserace_payments(*, race(*), racecourse(*))"
+        )
         .lt("date", lastDate.toISOString())
         .gt("date", firstDate.toISOString());
 
       if (error) throw error;
 
       setMonthPayments(data);
+
+      const dayPayments = data.filter((dayPayment) => {
+        return new Date(dayPayment.date).toDateString() === date.toDateString();
+      });
+
+      setDayPayments(dayPayments);
     };
 
     fetchPayments();
@@ -110,6 +123,7 @@ export const usePayments = (date: Date) => {
 
   return {
     monthPayments,
+    dayPayments,
     events,
     insertPaymentForPachoslo,
     insertPaymentForHorserace,

@@ -3,7 +3,7 @@ import { DateClickArg } from "@fullcalendar/interaction";
 import { useState } from "react";
 
 import { Calender, Modal } from "@/components/elements";
-import { PaymentRegisterForm } from "@/features/home/form/PaymentRegisterForm";
+import { DayPayment } from "@/features/home/DayPayment";
 import { usePayments } from "@/hooks/use-payments";
 import { getThisMonth } from "@/utils/date";
 
@@ -39,8 +39,20 @@ export const Home = () => {
         onDatasetChange={handleDatasetChange}
       />
 
-      <Modal isOpen={isOpen} onRequestClose={handleModalClose}>
-        <PaymentRegisterForm date={selectedDate} />
+      <Modal
+        isOpen={isOpen}
+        onRequestClose={handleModalClose}
+        style={{
+          content: {
+            left: 0,
+            bottom: 0,
+            width: "100%",
+            borderRadius: "20px 20px 0 0",
+          },
+        }}
+      >
+        {/*<PaymentRegisterForm date={selectedDate} />*/}
+        <DayPayment date={selectedDate} onCloseClick={handleModalClose} />
       </Modal>
     </>
   );
