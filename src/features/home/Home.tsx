@@ -1,3 +1,4 @@
+import { DatesSetArg } from "@fullcalendar/core";
 import { DateClickArg } from "@fullcalendar/interaction";
 import { useState } from "react";
 
@@ -20,9 +21,17 @@ export const Home = () => {
     setIsOpen(false);
   };
 
+  const handleDatasetChange = (datesSetArg: DatesSetArg) => {
+    setTargetMonth(new Date(datesSetArg.start));
+  };
+
   return (
     <>
-      <Calender events={events} onDateClick={handleDateClick} />
+      <Calender
+        events={events}
+        onDateClick={handleDateClick}
+        onDatasetChange={handleDatasetChange}
+      />
 
       <Modal isOpen={isOpen} onRequestClose={handleModalClose}>
         <PaymentRegisterForm date={selectedDate} />
