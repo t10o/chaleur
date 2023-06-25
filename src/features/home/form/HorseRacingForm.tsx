@@ -45,7 +45,7 @@ export const HorseRacingForm = ({ date }: Props) => {
 
   const { insertHorserace } = useHorserace();
 
-  const { insertPaymentForHorserace } = usePayments();
+  const { insertPaymentForHorserace } = usePayments(date);
 
   const auth = useRecoilValue<AuthState>(authState);
 

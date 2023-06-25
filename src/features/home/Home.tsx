@@ -3,10 +3,13 @@ import { useState } from "react";
 
 import { Calender, Modal } from "@/components/elements";
 import { PaymentRegisterForm } from "@/features/home/form/PaymentRegisterForm";
+import { usePayments } from "@/hooks/use-payments";
 
 export const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [targetMonth, setTargetMonth] = useState<Date>(new Date());
+  const { events } = usePayments(new Date());
 
   const handleDateClick = (arg: DateClickArg) => {
     setSelectedDate(arg.date);
@@ -19,7 +22,7 @@ export const Home = () => {
 
   return (
     <>
-      <Calender onDateClick={handleDateClick} />
+      <Calender events={events} onDateClick={handleDateClick} />
 
       <Modal isOpen={isOpen} onRequestClose={handleModalClose}>
         <PaymentRegisterForm date={selectedDate} />

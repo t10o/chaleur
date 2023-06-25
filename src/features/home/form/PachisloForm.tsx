@@ -56,7 +56,7 @@ export const PachisloForm = ({ date }: Props) => {
 
   const { insertPachoslo } = usePachislo();
 
-  const { insertPaymentForPachoslo } = usePayments();
+  const { insertPaymentForPachoslo } = usePayments(date);
 
   const auth = useRecoilValue<AuthState>(authState);
 

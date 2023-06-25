@@ -5,7 +5,7 @@ import { useState } from "react";
 
 import { HorseRacingForm } from "@/features/home/form/HorseRacingForm";
 import { PachisloForm } from "@/features/home/form/PachisloForm";
-import { format } from "@/utils/date";
+import { formatJpYmd } from "@/utils/date";
 
 interface Props {
   date: Date;
@@ -35,7 +35,7 @@ export const PaymentRegisterForm = ({ date }: Props) => {
           "font-bold"
         )}
       >
-        {format(date)}
+        {formatJpYmd(date)}
       </p>
 
       <ToggleButtonGroup

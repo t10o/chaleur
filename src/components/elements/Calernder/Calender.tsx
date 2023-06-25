@@ -3,11 +3,17 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 
+export interface CalendarEvent {
+  title: string;
+  date: string;
+}
+
 interface Props {
+  events?: CalendarEvent[];
   onDateClick: (dateClickArg: DateClickArg) => void;
 }
 
-export const Calender = ({ onDateClick }: Props) => {
+export const Calender = ({ events, onDateClick }: Props) => {
   const handleDateClick = (arg: DateClickArg) => {
     onDateClick(arg);
   };
@@ -19,6 +25,7 @@ export const Calender = ({ onDateClick }: Props) => {
       locales={[jaLocale]}
       locale="ja"
       height="auto"
+      events={events}
       dateClick={handleDateClick}
     />
   );
