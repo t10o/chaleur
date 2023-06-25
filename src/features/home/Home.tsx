@@ -5,12 +5,14 @@ import { useState } from "react";
 import { Calender, Modal } from "@/components/elements";
 import { PaymentRegisterForm } from "@/features/home/form/PaymentRegisterForm";
 import { usePayments } from "@/hooks/use-payments";
+import { getThisMonth } from "@/utils/date";
 
 export const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [targetMonth, setTargetMonth] = useState<Date>(new Date());
-  const { events } = usePayments(new Date());
+
+  const { events } = usePayments(targetMonth);
 
   const handleDateClick = (arg: DateClickArg) => {
     setSelectedDate(arg.date);
@@ -22,7 +24,11 @@ export const Home = () => {
   };
 
   const handleDatasetChange = (datesSetArg: DatesSetArg) => {
-    setTargetMonth(new Date(datesSetArg.start));
+    const thisMonth = getThisMonth(datesSetArg.start, datesSetArg.end);
+
+    if (targetMonth.toDateString() === thisMonth.toDateString()) return;
+
+    setTargetMonth(thisMonth);
   };
 
   return (

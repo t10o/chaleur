@@ -37,7 +37,7 @@ export const usePayments = (date: Date) => {
     };
 
     fetchPayments();
-  }, []);
+  }, [date]);
 
   useEffect(() => {
     if (!monthPayments) return;
