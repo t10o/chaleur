@@ -1,6 +1,6 @@
 export const MENUS = [
   {
-    name: "Home",
+    name: "MyPage",
     href: "/",
   },
   {

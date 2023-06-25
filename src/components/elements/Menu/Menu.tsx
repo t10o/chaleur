@@ -54,7 +54,7 @@ export const Menu = ({ onClick, ...props }: MenuProps) => {
         <li className={clsx("my-8")}>
           <Button
             className={clsx("text-2xl", "pl-0")}
-            label="Sign Out"
+            label="SignOut"
             onClick={handleClick}
           />
         </li>
