@@ -28,3 +28,8 @@ body {
 .ReactModal__Overlay {
   z-index: 1000;
 }
+
+/* NOTE: カレンダーのイベントで５桁表示できるように調整 */
+.fc-event-title {
+  font-size: 12px
+}
