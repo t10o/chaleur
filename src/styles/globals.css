@@ -31,5 +31,11 @@ body {
 
 /* NOTE: カレンダーのイベントで５桁表示できるように調整 */
 .fc-event-title {
-  font-size: 12px
+  font-size: 12px;
+}
+
+.fc-event-title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
