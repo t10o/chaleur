@@ -40,9 +40,17 @@ export const DayPayment = ({ date, onCloseClick }: Props) => {
       {dayPayments &&
         dayPayments.map((dayPayment) => {
           return dayPayment.pachislo_payments ? (
-            <PachisloListItem data={dayPayment} />
+            <PachisloListItem
+              data={dayPayment}
+              date={date}
+              key={dayPayment.id}
+            />
           ) : (
-            <HorseraceListItem data={dayPayment} />
+            <HorseraceListItem
+              data={dayPayment}
+              date={date}
+              key={dayPayment.id}
+            />
           );
         })}
 
@@ -55,7 +63,7 @@ export const DayPayment = ({ date, onCloseClick }: Props) => {
       </Button>
 
       <Modal isOpen={isOpen} onRequestClose={handleModalClose}>
-        <PaymentRegisterForm date={date} />
+        <PaymentRegisterForm date={date} onUpdated={handleModalClose} />
       </Modal>
     </>
   );

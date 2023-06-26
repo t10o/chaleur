@@ -3,6 +3,7 @@ import { InputLabel, MenuItem, Select } from "@mui/material";
 import clsx from "clsx";
 import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import * as z from "zod";
 
@@ -12,13 +13,20 @@ import { usePayments } from "@/hooks/use-payments";
 import { useRace } from "@/hooks/use-race";
 import { useRacecourse } from "@/hooks/use-racecourse";
 import { HorseraceFormValue } from "@/models/horserace";
+import { PaymentsResponse } from "@/models/payments";
 import { AuthState, authState } from "@/stores/auth";
 
 interface Props {
+  data?: PaymentsResponse;
   date: Date;
+  onUpdated: () => void;
 }
 
-export const HorseRacingForm = ({ date }: Props) => {
+export const HorseRacingForm = ({
+  data = undefined,
+  date,
+  onUpdated,
+}: Props) => {
   const schema = z.object({
     racecourse: z.string().min(1, { message: "会場を入力してください。" }),
     race: z.string().min(1, { message: "レースを入力してください" }),
@@ -34,8 +42,11 @@ export const HorseRacingForm = ({ date }: Props) => {
   } = useForm<HorseraceFormValue>({
     resolver: zodResolver(schema),
     defaultValues: {
-      racecourse: "1",
-      race: "1",
+      racecourse: data ? `${data.horserace_payments?.racecourse.id}` : "1",
+      race: data ? `${data.horserace_payments?.race.id}` : "1",
+      pay: data && `${data.pay}`,
+      payback: data && `${data.payback}`,
+      memo: data && data.memo ? data.memo : undefined,
     },
   });
 
@@ -43,9 +54,10 @@ export const HorseRacingForm = ({ date }: Props) => {
 
   const { raceMaster, error: raceError } = useRace();
 
-  const { insertHorserace } = useHorserace();
+  const { insertHorserace, updateHorserace } = useHorserace();
 
-  const { insertPaymentForHorserace } = usePayments(date);
+  const { insertPaymentForHorserace, updatePaymentForHorserace } =
+    usePayments(date);
 
   const auth = useRecoilValue<AuthState>(authState);
 
@@ -58,22 +70,34 @@ export const HorseRacingForm = ({ date }: Props) => {
   }
 
   const onSubmit: SubmitHandler<HorseraceFormValue> = async (
-    data: HorseraceFormValue
+    formData: HorseraceFormValue
   ) => {
     try {
-      const { data: horseraceData, error: horseraceError } =
-        await insertHorserace(data);
+      const { data: horseraceData, error: horseraceError } = data
+        ? await updateHorserace(data.horserace_payment_id!, formData)
+        : await insertHorserace(formData);
 
       if (horseraceError) throw horseraceError;
 
-      const { error } = await insertPaymentForHorserace(
-        data,
-        horseraceData![0].id,
-        date,
-        auth.user.id
-      );
+      const { error } = data
+        ? await updatePaymentForHorserace(
+            data.id,
+            formData,
+            horseraceData![0].id,
+            date,
+            auth.user.id
+          )
+        : await insertPaymentForHorserace(
+            formData,
+            horseraceData![0].id,
+            date,
+            auth.user.id
+          );
 
       if (error) throw error;
+
+      onUpdated();
+      toast.success("保存しました");
     } catch (error: any) {
       alert(error.message);
     }

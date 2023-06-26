@@ -18,5 +18,18 @@ export const useHorserace = () => {
     return { data, error };
   };
 
-  return { insertHorserace };
+  const updateHorserace = async (id: number, value: HorseraceFormValue) => {
+    const { data, error } = await supabase
+      .from("horserace_payments")
+      .update({
+        racecourse: Number(value.racecourse),
+        race: Number(value.race),
+      })
+      .eq("id", id)
+      .select();
+
+    return { data, error };
+  };
+
+  return { insertHorserace, updateHorserace };
 };

@@ -3,6 +3,7 @@ import { InputLabel, ToggleButton } from "@mui/material";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import clsx from "clsx";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import * as z from "zod";
 
@@ -13,13 +14,16 @@ import { usePachislo } from "@/hooks/use-pachislo";
 import { usePayments } from "@/hooks/use-payments";
 import { useShopMaster } from "@/hooks/use-shop-master";
 import { PachisloFormValue } from "@/models/pachislo";
+import { PaymentsResponse } from "@/models/payments";
 import { AuthState, authState } from "@/stores/auth";
 
 interface Props {
+  data?: PaymentsResponse;
   date: Date;
+  onUpdated: () => void;
 }
 
-export const PachisloForm = ({ date }: Props) => {
+export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
   const schema = z.object({
     shop: z.string().min(1, { message: "店を入力してください。" }),
     machine: z.string().min(1, { message: "台を入力してください" }),
@@ -36,7 +40,12 @@ export const PachisloForm = ({ date }: Props) => {
   } = useForm<PachisloFormValue>({
     resolver: zodResolver(schema),
     defaultValues: {
-      kind: "pachinko",
+      shop: data && data.pachislo_payments?.shop.name,
+      kind: data ? data.pachislo_payments?.kind : "pachinko",
+      machine: data && data.pachislo_payments?.machine.name,
+      pay: data && `${data.pay}`,
+      payback: data && `${data.payback}`,
+      memo: data && data.memo ? data.memo : undefined,
     },
   });
 
@@ -54,9 +63,10 @@ export const PachisloForm = ({ date }: Props) => {
     insertShopMaster,
   } = useShopMaster();
 
-  const { insertPachoslo } = usePachislo();
+  const { insertPachoslo, updatePachislo } = usePachislo();
 
-  const { insertPaymentForPachoslo } = usePayments(date);
+  const { insertPaymentForPachoslo, updatePaymentForPachoslo } =
+    usePayments(date);
 
   const auth = useRecoilValue<AuthState>(authState);
 
@@ -69,37 +79,54 @@ export const PachisloForm = ({ date }: Props) => {
   }
 
   const onSubmit: SubmitHandler<PachisloFormValue> = async (
-    data: PachisloFormValue
+    formData: PachisloFormValue
   ) => {
     try {
-      if (!machineNames.includes(data.machine)) {
-        const error = await insertMachineMaster(data.machine, data.kind);
+      if (!machineNames.includes(formData.machine)) {
+        const error = await insertMachineMaster(
+          formData.machine,
+          formData.kind
+        );
 
         if (error) throw error;
       }
 
-      if (!shopNames.includes(data.shop)) {
-        const error = await insertShopMaster(data.shop);
+      if (!shopNames.includes(formData.shop)) {
+        const error = await insertShopMaster(formData.shop);
 
         if (error) throw error;
       }
 
-      const { data: pachisloData, error: pachisloError } = await insertPachoslo(
-        data,
-        machineMaster,
-        shopMaster
-      );
+      const { data: pachisloData, error: pachisloError } = data
+        ? await updatePachislo(
+            data.pachioslo_payment_id!,
+            formData,
+            machineMaster,
+            shopMaster
+          )
+        : await insertPachoslo(formData, machineMaster, shopMaster);
 
       if (pachisloError) throw pachisloError;
 
-      const { error } = await insertPaymentForPachoslo(
-        data,
-        pachisloData![0].id,
-        date,
-        auth.user.id
-      );
+      const { error } = data
+        ? await updatePaymentForPachoslo(
+            data.id,
+            formData,
+            pachisloData![0].id,
+            date,
+            auth.user.id
+          )
+        : await insertPaymentForPachoslo(
+            formData,
+            pachisloData![0].id,
+            date,
+            auth.user.id
+          );
 
       if (error) throw error;
+
+      onUpdated();
+      toast.success("保存しました");
     } catch (error: any) {
       alert(error.message);
     }
@@ -151,6 +178,7 @@ export const PachisloForm = ({ date }: Props) => {
       <InputLabel id="pay">投資</InputLabel>
       <Input
         id="pay"
+        type="number"
         className={clsx("w-full", !errors.pay && "mb-4")}
         {...register("pay", { required: true })}
       />
@@ -163,6 +191,7 @@ export const PachisloForm = ({ date }: Props) => {
       <InputLabel id="payback">回収</InputLabel>
       <Input
         id="payback"
+        type="number"
         className={clsx("w-full", !errors.payback && "mb-4")}
         {...register("payback", { required: true })}
       />

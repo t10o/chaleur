@@ -22,33 +22,6 @@ export const usePayments = (date: Date) => {
   const [events, setEvents] = useState<CalendarEvent[] | undefined>(undefined);
 
   useEffect(() => {
-    const fetchPayments = async () => {
-      const lastDate = new Date(date);
-      lastDate.setMonth(date.getMonth() + 1);
-      lastDate.setDate(0);
-
-      const firstDate = new Date(date);
-      firstDate.setDate(1);
-
-      const { data, error } = await supabase
-        .from("payments")
-        .select(
-          "*, pachislo_payments(*, machine(*), shop(*)), horserace_payments(*, race(*), racecourse(*))"
-        )
-        .lt("date", lastDate.toISOString())
-        .gt("date", firstDate.toISOString());
-
-      if (error) throw error;
-
-      setMonthPayments(data);
-
-      const dayPayments = data.filter((dayPayment) => {
-        return new Date(dayPayment.date).toDateString() === date.toDateString();
-      });
-
-      setDayPayments(dayPayments);
-    };
-
     fetchPayments();
   }, [date]);
 
@@ -81,6 +54,33 @@ export const usePayments = (date: Date) => {
     setEvents(events);
   }, [monthPayments]);
 
+  const fetchPayments = async () => {
+    const lastDate = new Date(date);
+    lastDate.setMonth(date.getMonth() + 1);
+    lastDate.setDate(0);
+
+    const firstDate = new Date(date);
+    firstDate.setDate(1);
+
+    const { data, error } = await supabase
+      .from("payments")
+      .select(
+        "*, pachislo_payments(*, machine(*), shop(*)), horserace_payments(*, race(*), racecourse(*))"
+      )
+      .lt("date", lastDate.toISOString())
+      .gt("date", firstDate.toISOString());
+
+    if (error) throw error;
+
+    setMonthPayments(data);
+
+    const dayPayments = data.filter((dayPayment) => {
+      return new Date(dayPayment.date).toDateString() === date.toDateString();
+    });
+
+    setDayPayments(dayPayments);
+  };
+
   const insertPaymentForPachoslo = async (
     value: PachisloFormValue,
     pachisloPaymentId: number,
@@ -89,12 +89,34 @@ export const usePayments = (date: Date) => {
   ) => {
     const { error } = await supabase.from("payments").insert({
       date: date.toDateString(),
-      pay: value.pay,
-      payback: value.payback,
+      pay: Number(value.pay),
+      payback: Number(value.payback),
       memo: value.memo,
       pachioslo_payment_id: pachisloPaymentId,
       user_id: userId,
     });
+
+    return { error };
+  };
+
+  const updatePaymentForPachoslo = async (
+    id: number,
+    value: PachisloFormValue,
+    pachisloPaymentId: number,
+    date: Date,
+    userId: string
+  ) => {
+    const { error } = await supabase
+      .from("payments")
+      .update({
+        date: date.toDateString(),
+        pay: Number(value.pay),
+        payback: Number(value.payback),
+        memo: value.memo,
+        pachioslo_payment_id: pachisloPaymentId,
+        user_id: userId,
+      })
+      .eq("id", id);
 
     return { error };
   };
@@ -107,12 +129,34 @@ export const usePayments = (date: Date) => {
   ) => {
     const { error } = await supabase.from("payments").insert({
       date: date.toDateString(),
-      pay: value.pay,
-      payback: value.payback,
+      pay: Number(value.pay),
+      payback: Number(value.payback),
       memo: value.memo,
       horserace_payment_id: horseracePaymentId,
       user_id: userId,
     });
+
+    return { error };
+  };
+
+  const updatePaymentForHorserace = async (
+    id: number,
+    value: HorseraceFormValue,
+    horseracePaymentId: number,
+    date: Date,
+    userId: string
+  ) => {
+    const { error } = await supabase
+      .from("payments")
+      .update({
+        date: date.toDateString(),
+        pay: Number(value.pay),
+        payback: Number(value.payback),
+        memo: value.memo,
+        horserace_payment_id: horseracePaymentId,
+        user_id: userId,
+      })
+      .eq("id", id);
 
     return { error };
   };
@@ -126,6 +170,8 @@ export const usePayments = (date: Date) => {
     dayPayments,
     events,
     insertPaymentForPachoslo,
+    updatePaymentForPachoslo,
     insertPaymentForHorserace,
+    updatePaymentForHorserace,
   };
 };

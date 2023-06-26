@@ -1,24 +1,41 @@
 import { ToggleButton } from "@mui/material";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { HorseRacingForm } from "@/features/home/form/HorseRacingForm";
 import { PachisloForm } from "@/features/home/form/PachisloForm";
+import { PaymentsResponse } from "@/models/payments";
 import { formatJpYmd } from "@/utils/date";
 
 interface Props {
+  data?: PaymentsResponse;
   date: Date;
+  onUpdated: () => void;
 }
 
-export const PaymentRegisterForm = ({ date }: Props) => {
-  const [gamble, setGamble] = useState("pachislo");
+export const PaymentRegisterForm = ({
+  data = undefined,
+  date,
+  onUpdated,
+}: Props) => {
+  const [gamble, setGamble] = useState<"pachislo" | "horserace">("pachislo");
+
+  useEffect(() => {
+    if (data) {
+      if (data.horserace_payment_id) {
+        setGamble("horserace");
+      } else {
+        setGamble("pachislo");
+      }
+    }
+  }, []);
 
   const isPachislo = gamble === "pachislo";
 
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
-    value: string
+    value: "pachislo" | "horserace"
   ) => {
     setGamble(value);
   };
@@ -43,6 +60,7 @@ export const PaymentRegisterForm = ({ date }: Props) => {
         value={gamble}
         exclusive
         color="primary"
+        disabled={!!data}
         onChange={handleChange}
       >
         <ToggleButton className={clsx("w-32")} value="pachislo">
@@ -55,9 +73,9 @@ export const PaymentRegisterForm = ({ date }: Props) => {
       </ToggleButtonGroup>
 
       {isPachislo ? (
-        <PachisloForm date={date} />
+        <PachisloForm data={data} date={date} onUpdated={onUpdated} />
       ) : (
-        <HorseRacingForm date={date} />
+        <HorseRacingForm data={data} date={date} onUpdated={onUpdated} />
       )}
     </>
   );

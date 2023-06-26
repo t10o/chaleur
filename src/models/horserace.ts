@@ -1,7 +1,7 @@
 export interface HorseraceFormValue {
   racecourse: string;
   race: string;
-  pay: number;
-  payback: number;
+  pay: string;
+  payback: string;
   memo: string;
 }

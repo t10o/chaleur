@@ -2,7 +2,7 @@ export interface PachisloFormValue {
   shop: string;
   kind: string;
   machine: string;
-  pay: number;
-  payback: number;
+  pay: string;
+  payback: string;
   memo: string;
 }
