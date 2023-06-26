@@ -51,7 +51,6 @@ export const Home = () => {
           },
         }}
       >
-        {/*<PaymentRegisterForm date={selectedDate} />*/}
         <DayPayment date={selectedDate} onCloseClick={handleModalClose} />
       </Modal>
     </>

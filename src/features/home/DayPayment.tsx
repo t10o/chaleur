@@ -27,8 +27,6 @@ export const DayPayment = ({ date, onCloseClick }: Props) => {
     setIsOpen(false);
   };
 
-  console.log(dayPayments);
-
   return (
     <>
       <div className={clsx("flex", "justify-between", "items-center", "mb-4")}>
