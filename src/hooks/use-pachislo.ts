@@ -54,5 +54,14 @@ export const usePachislo = () => {
     return { data, error };
   };
 
-  return { insertPachoslo, updatePachislo };
+  const deletePachislo = async (id: number) => {
+    const { error } = await supabase
+      .from("pachislo_payments")
+      .delete()
+      .eq("id", id);
+
+    return { error };
+  };
+
+  return { insertPachoslo, updatePachislo, deletePachislo };
 };

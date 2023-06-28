@@ -161,6 +161,12 @@ export const usePayments = (date: Date) => {
     return { error };
   };
 
+  const deletePayment = async (id: number) => {
+    const { error } = await supabase.from("payments").delete().eq("id", id);
+
+    return { error };
+  };
+
   const paymentColor = (payment: number) => {
     return payment > 0 ? "green" : "red";
   };
@@ -173,5 +179,6 @@ export const usePayments = (date: Date) => {
     updatePaymentForPachoslo,
     insertPaymentForHorserace,
     updatePaymentForHorserace,
+    deletePayment,
   };
 };

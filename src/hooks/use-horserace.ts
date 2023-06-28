@@ -31,5 +31,14 @@ export const useHorserace = () => {
     return { data, error };
   };
 
-  return { insertHorserace, updateHorserace };
+  const deleteHorserace = async (id: number) => {
+    const { error } = await supabase
+      .from("horserace_payments")
+      .delete()
+      .eq("id", id);
+
+    return { error };
+  };
+
+  return { insertHorserace, updateHorserace, deleteHorserace };
 };

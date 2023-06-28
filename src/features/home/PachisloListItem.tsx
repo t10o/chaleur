@@ -1,8 +1,17 @@
 import clsx from "clsx";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
-import { Button, Modal } from "@/components/elements";
+import {
+  AccentButton,
+  Button,
+  Dialog,
+  Modal,
+  PrimaryButton,
+} from "@/components/elements";
 import { PaymentRegisterForm } from "@/features/home/form/PaymentRegisterForm";
+import { usePachislo } from "@/hooks/use-pachislo";
+import { usePayments } from "@/hooks/use-payments";
 import { PaymentsResponse } from "@/models/payments";
 
 interface Props {
@@ -11,18 +20,49 @@ interface Props {
 }
 
 export const PachisloListItem = ({ data, date }: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  const { deletePachislo } = usePachislo();
+  const { deletePayment } = usePayments(date);
 
   const isWin = (payment: number) => {
     return payment >= 0;
   };
 
   const handleEditClick = () => {
-    setIsOpen(true);
+    setIsFormOpen(true);
   };
 
-  const handleModalClose = () => {
-    setIsOpen(false);
+  const handleFormModalClose = () => {
+    setIsFormOpen(false);
+  };
+
+  const handleDialogClose = () => {
+    setIsConfirmOpen(false);
+  };
+
+  const handleDeleteClick = async () => {
+    setIsConfirmOpen(true);
+  };
+
+  const handleDelete = async () => {
+    try {
+      const { error: paymentError } = await deletePayment(data.id);
+
+      if (paymentError) throw paymentError;
+
+      const { error: pachisloError } = await deletePachislo(
+        data.pachioslo_payment_id!
+      );
+
+      if (pachisloError) throw pachisloError;
+
+      toast.success("削除しました");
+      setIsConfirmOpen(false);
+    } catch (error: any) {
+      alert(error.message);
+    }
   };
 
   return (
@@ -52,32 +92,50 @@ export const PachisloListItem = ({ data, date }: Props) => {
         </div>
 
         <div className={clsx("flex", "justify-between", "items-center")}>
-          <Button
-            className={clsx(
-              "w-1/2",
-              "bg-accent",
-              "text-white",
-              "text-sm",
-              "mr-2"
-            )}
+          <AccentButton
+            className={clsx("w-1/2", "text-sm", "mr-2")}
             label="削除"
+            onClick={handleDeleteClick}
           />
 
-          <Button
-            className={clsx("w-1/2", "bg-primary", "text-white", "text-sm")}
+          <PrimaryButton
+            className={clsx("w-1/2", "text-sm")}
             label="編集"
             onClick={handleEditClick}
           />
         </div>
       </div>
 
-      <Modal isOpen={isOpen} onRequestClose={handleModalClose}>
+      <Modal isOpen={isFormOpen} onRequestClose={handleFormModalClose}>
         <PaymentRegisterForm
           data={data}
           date={date}
-          onUpdated={handleModalClose}
+          onUpdated={handleFormModalClose}
         />
       </Modal>
+
+      <Dialog
+        isOpen={isConfirmOpen}
+        title="なんで消すん？"
+        message="負けたの隠そうってことなら消さんといてください。"
+        onRequestClose={handleDialogClose}
+      >
+        <div
+          className={clsx("flex", "justify-between", "items-center", "mt-4")}
+        >
+          <Button
+            className={clsx("mr-2", "w-1/2")}
+            label="キャンセル"
+            onClick={handleDialogClose}
+          />
+
+          <AccentButton
+            className={clsx("w-1/2")}
+            label="削除"
+            onClick={handleDelete}
+          />
+        </div>
+      </Dialog>
     </>
   );
 };
