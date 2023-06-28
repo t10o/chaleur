@@ -25,11 +25,7 @@ interface Props {
   onUpdated: () => void;
 }
 
-export const HorseRacingForm = ({
-  data = undefined,
-  date,
-  onUpdated,
-}: Props) => {
+export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
   const schema = z.object({
     racecourse: z.string().min(1, { message: "会場を入力してください。" }),
     race: z.string().min(1, { message: "レースを入力してください" }),
@@ -206,4 +202,4 @@ export const HorseRacingForm = ({
   );
 };
 
-HorseRacingForm.displayName = "HorseRacingForm";
+HorseraceForm.displayName = "HorseRacingForm";

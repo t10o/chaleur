@@ -47,8 +47,9 @@ export const HorseraceListItem = ({ data, date }: Props) => {
     try {
       const { error: paymentError } = await deletePayment(data.id);
 
-      if (paymentError)
+      if (paymentError) {
         throw new Error(`収支の削除に失敗しました：${paymentError.message}`);
+      }
 
       const { error: horseraceError } = await deleteHorserace(
         data.horserace_payment_id!
