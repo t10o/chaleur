@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import clsx from "clsx";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import * as z from "zod";
 
 import { Input, PrimaryButton } from "@/components/elements";
@@ -54,13 +55,11 @@ export const Signup = () => {
         password: data.password,
       });
 
-      if (signUpError) {
-        throw signUpError;
-      }
+      if (signUpError) throw new Error(signUpError.message);
 
-      alert("登録完了メールを確認してください");
-    } catch (error) {
-      alert("エラーが発生しました");
+      toast.success("登録完了メールを確認してください");
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
 

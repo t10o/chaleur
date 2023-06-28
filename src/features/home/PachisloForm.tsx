@@ -7,11 +7,14 @@ import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import * as z from "zod";
 
+import { insertPachoslo, updatePachislo } from "@/apis/pachisloPayments";
+import {
+  insertPaymentForPachoslo,
+  updatePaymentForPachoslo,
+} from "@/apis/payments";
 import { Button, Textarea } from "@/components/elements";
 import { Input } from "@/components/elements/Input";
 import { useMachineMaster } from "@/hooks/use-machine-master";
-import { usePachislo } from "@/hooks/use-pachislo";
-import { usePayments } from "@/hooks/use-payments";
 import { useShopMaster } from "@/hooks/use-shop-master";
 import { PachisloFormValue } from "@/models/pachislo";
 import { PaymentsResponse } from "@/models/payments";
@@ -63,11 +66,6 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
     insertShopMaster,
   } = useShopMaster();
 
-  const { insertPachoslo, updatePachislo } = usePachislo();
-
-  const { insertPaymentForPachoslo, updatePaymentForPachoslo } =
-    usePayments(date);
-
   const auth = useRecoilValue<AuthState>(authState);
 
   if (machineError || !machineNames || !machineMaster) {
@@ -88,13 +86,13 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
           formData.kind
         );
 
-        if (error) throw error;
+        if (error) throw new Error(`台の保存に失敗しました：${error.message}`);
       }
 
       if (!shopNames.includes(formData.shop)) {
         const error = await insertShopMaster(formData.shop);
 
-        if (error) throw error;
+        if (error) throw new Error(`店の保存に失敗しました：${error.message}`);
       }
 
       const { data: pachisloData, error: pachisloError } = data
@@ -106,7 +104,10 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
           )
         : await insertPachoslo(formData, machineMaster, shopMaster);
 
-      if (pachisloError) throw pachisloError;
+      if (pachisloError)
+        throw new Error(
+          `パチスロ収支の保存に失敗しました：${pachisloError.message}`
+        );
 
       const { error } = data
         ? await updatePaymentForPachoslo(
@@ -123,12 +124,12 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
             auth.user.id
           );
 
-      if (error) throw error;
+      if (error) throw new Error(`収支の保存に失敗しました：${error.message}`);
 
       onUpdated();
       toast.success("保存しました");
     } catch (error: any) {
-      alert(error.message);
+      toast.error(error.message);
     }
   };
 

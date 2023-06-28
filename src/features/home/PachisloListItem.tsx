@@ -2,6 +2,8 @@ import clsx from "clsx";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
+import { deletePachislo } from "@/apis/pachisloPayments";
+import { deletePayment } from "@/apis/payments";
 import {
   AccentButton,
   Button,
@@ -9,9 +11,7 @@ import {
   Modal,
   PrimaryButton,
 } from "@/components/elements";
-import { PaymentRegisterForm } from "@/features/home/form/PaymentRegisterForm";
-import { usePachislo } from "@/hooks/use-pachislo";
-import { usePayments } from "@/hooks/use-payments";
+import { PaymentRegisterForm } from "@/features/home/PaymentRegisterForm";
 import { PaymentsResponse } from "@/models/payments";
 
 interface Props {
@@ -22,9 +22,6 @@ interface Props {
 export const PachisloListItem = ({ data, date }: Props) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-
-  const { deletePachislo } = usePachislo();
-  const { deletePayment } = usePayments(date);
 
   const isWin = (payment: number) => {
     return payment >= 0;
@@ -50,18 +47,22 @@ export const PachisloListItem = ({ data, date }: Props) => {
     try {
       const { error: paymentError } = await deletePayment(data.id);
 
-      if (paymentError) throw paymentError;
+      if (paymentError)
+        throw new Error(`収支の削除に失敗しました：${paymentError.message}`);
 
       const { error: pachisloError } = await deletePachislo(
         data.pachioslo_payment_id!
       );
 
-      if (pachisloError) throw pachisloError;
+      if (pachisloError)
+        throw new Error(
+          `パチスロ収支の削除に失敗しました：${pachisloError.message}`
+        );
 
       toast.success("削除しました");
       setIsConfirmOpen(false);
     } catch (error: any) {
-      alert(error.message);
+      toast.error(error.message);
     }
   };
 

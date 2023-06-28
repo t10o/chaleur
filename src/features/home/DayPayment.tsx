@@ -4,9 +4,9 @@ import clsx from "clsx";
 import { useState } from "react";
 
 import { Button, Modal } from "@/components/elements";
-import { PaymentRegisterForm } from "@/features/home/form/PaymentRegisterForm";
 import { HorseraceListItem } from "@/features/home/HorseraceListItem";
 import { PachisloListItem } from "@/features/home/PachisloListItem";
+import { PaymentRegisterForm } from "@/features/home/PaymentRegisterForm";
 import { usePayments } from "@/hooks/use-payments";
 import { formatJpYmd } from "@/utils/date";
 

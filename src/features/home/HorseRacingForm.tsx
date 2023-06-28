@@ -7,9 +7,12 @@ import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import * as z from "zod";
 
+import { insertHorserace, updateHorserace } from "@/apis/horseracePayments";
+import {
+  insertPaymentForHorserace,
+  updatePaymentForHorserace,
+} from "@/apis/payments";
 import { Button, Input, Textarea } from "@/components/elements";
-import { useHorserace } from "@/hooks/use-horserace";
-import { usePayments } from "@/hooks/use-payments";
 import { useRace } from "@/hooks/use-race";
 import { useRacecourse } from "@/hooks/use-racecourse";
 import { HorseraceFormValue } from "@/models/horserace";
@@ -54,11 +57,6 @@ export const HorseRacingForm = ({
 
   const { raceMaster, error: raceError } = useRace();
 
-  const { insertHorserace, updateHorserace } = useHorserace();
-
-  const { insertPaymentForHorserace, updatePaymentForHorserace } =
-    usePayments(date);
-
   const auth = useRecoilValue<AuthState>(authState);
 
   if (racecourseError || !racecourseMaster) {
@@ -77,7 +75,10 @@ export const HorseRacingForm = ({
         ? await updateHorserace(data.horserace_payment_id!, formData)
         : await insertHorserace(formData);
 
-      if (horseraceError) throw horseraceError;
+      if (horseraceError)
+        throw new Error(
+          `競馬収支の保存に失敗しました：${horseraceError.message}`
+        );
 
       const { error } = data
         ? await updatePaymentForHorserace(
@@ -94,12 +95,12 @@ export const HorseRacingForm = ({
             auth.user.id
           );
 
-      if (error) throw error;
+      if (error) throw new Error(`収支の保存に失敗しました：${error.message}`);
 
       onUpdated();
       toast.success("保存しました");
     } catch (error: any) {
-      alert(error.message);
+      toast.error(error.message);
     }
   };
 
