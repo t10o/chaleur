@@ -19,8 +19,8 @@ export const fetchMonthPayments = async (date: Date) => {
     .select(
       "*, pachislo_payments(*, machine(*), shop(*)), horserace_payments(*, race(*), racecourse(*))"
     )
-    .lt("date", lastDate.toDateString())
-    .gt("date", firstDate.toDateString());
+    .lte("date", lastDate.toDateString())
+    .gte("date", firstDate.toDateString());
 
   return { data, error };
 };
