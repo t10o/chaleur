@@ -38,8 +38,14 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
     shop: z.string().min(1, { message: "店を入力してください。" }),
     machine: z.string().min(1, { message: "台を入力してください" }),
     kind: z.string(),
-    pay: z.string().min(1, { message: "投資を入力してください" }),
-    payback: z.string().min(1, { message: "回収を入力してください" }),
+    pay: z.preprocess(
+      (v) => Number(v),
+      z.number().min(1, { message: "投資を入力してください" })
+    ),
+    payback: z.preprocess(
+      (v) => Number(v),
+      z.number().min(1, { message: "回収を入力してください" })
+    ),
   });
 
   const {
