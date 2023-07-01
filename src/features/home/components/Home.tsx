@@ -1,18 +1,21 @@
 import { DatesSetArg } from "@fullcalendar/core";
 import { DateClickArg } from "@fullcalendar/interaction";
-import { useState } from "react";
 
 import { Calender, Modal } from "@/components/elements";
-import { DayPayment } from "@/features/home/DayPayment";
-import { usePayments } from "@/hooks/use-payments";
+import { DayPayment } from "@/features/home/components/DayPayment";
+import { useHome } from "@/features/home/hooks/use-home";
 import { getThisMonth } from "@/utils/date";
 
 export const Home = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [targetMonth, setTargetMonth] = useState<Date>(new Date());
-
-  const { events } = usePayments(targetMonth);
+  const {
+    events,
+    isOpen,
+    setIsOpen,
+    selectedDate,
+    setSelectedDate,
+    targetMonth,
+    setTargetMonth,
+  } = useHome();
 
   const handleDateClick = (arg: DateClickArg) => {
     setSelectedDate(arg.date);

@@ -6,6 +6,36 @@ import { Database } from "@/types/schema";
 
 const supabase = createPagesBrowserClient<Database>();
 
+export const fetchMonthPayments = async (date: Date) => {
+  const lastDate = new Date(date);
+  lastDate.setMonth(date.getMonth() + 1);
+  lastDate.setDate(0);
+
+  const firstDate = new Date(date);
+  firstDate.setDate(1);
+
+  const { data, error } = await supabase
+    .from("payments")
+    .select(
+      "*, pachislo_payments(*, machine(*), shop(*)), horserace_payments(*, race(*), racecourse(*))"
+    )
+    .lt("date", lastDate.toDateString())
+    .gt("date", firstDate.toDateString());
+
+  return { data, error };
+};
+
+export const fetchDayPayment = async (date: Date) => {
+  const { data, error } = await supabase
+    .from("payments")
+    .select(
+      "*, pachislo_payments(*, machine(*), shop(*)), horserace_payments(*, race(*), racecourse(*))"
+    )
+    .eq("date", date.toDateString());
+
+  return { data, error };
+};
+
 export const insertPaymentForPachoslo = async (
   value: PachisloFormValue,
   pachisloPaymentId: number,

@@ -1,13 +1,12 @@
 import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
-import { useState } from "react";
 
 import { Button, Modal } from "@/components/elements";
-import { HorseraceListItem } from "@/features/home/HorseraceListItem";
-import { PachisloListItem } from "@/features/home/PachisloListItem";
-import { PaymentRegisterForm } from "@/features/home/PaymentRegisterForm";
-import { usePayments } from "@/hooks/use-payments";
+import { HorseraceListItem } from "@/features/home/components/HorseraceListItem";
+import { PachisloListItem } from "@/features/home/components/PachisloListItem";
+import { PaymentRegisterForm } from "@/features/home/components/PaymentRegisterForm";
+import { useDayPayment } from "@/features/home/hooks/use-day-payment";
 import { formatJpYmd } from "@/utils/date";
 
 interface Props {
@@ -16,8 +15,7 @@ interface Props {
 }
 
 export const DayPayment = ({ date, onCloseClick }: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { dayPayments } = usePayments(date);
+  const { dayPayments, isOpen, setIsOpen } = useDayPayment(date);
 
   const handleClick = () => {
     setIsOpen(true);

@@ -3,8 +3,8 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 
-import { HorseraceForm } from "@/features/home/HorseraceForm";
-import { PachisloForm } from "@/features/home/PachisloForm";
+import { HorseraceForm } from "@/features/home/components/HorseraceForm";
+import { PachisloForm } from "@/features/home/components/PachisloForm";
 import { PaymentsResponse } from "@/models/payments";
 import { formatJpYmd } from "@/utils/date";
 

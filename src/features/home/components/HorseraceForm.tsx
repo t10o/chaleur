@@ -13,8 +13,8 @@ import {
   updatePaymentForHorserace,
 } from "@/apis/payments";
 import { Button, Input, Textarea } from "@/components/elements";
-import { useRace } from "@/hooks/use-race";
-import { useRacecourse } from "@/hooks/use-racecourse";
+import { useRace } from "@/features/home/hooks/use-race";
+import { useRacecourse } from "@/features/home/hooks/use-racecourse";
 import { HorseraceFormValue } from "@/models/horserace";
 import { PaymentsResponse } from "@/models/payments";
 import { AuthState, authState } from "@/stores/auth";

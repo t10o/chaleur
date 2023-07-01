@@ -14,8 +14,8 @@ import {
 } from "@/apis/payments";
 import { Button, Textarea } from "@/components/elements";
 import { Input } from "@/components/elements/Input";
-import { useMachineMaster } from "@/hooks/use-machine-master";
-import { useShopMaster } from "@/hooks/use-shop-master";
+import { useMachineMaster } from "@/features/home/hooks/use-machine-master";
+import { useShopMaster } from "@/features/home/hooks/use-shop-master";
 import { PachisloFormValue } from "@/models/pachislo";
 import { PaymentsResponse } from "@/models/payments";
 import { AuthState, authState } from "@/stores/auth";

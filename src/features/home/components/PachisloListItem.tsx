@@ -11,7 +11,7 @@ import {
   Modal,
   PrimaryButton,
 } from "@/components/elements";
-import { PaymentRegisterForm } from "@/features/home/PaymentRegisterForm";
+import { PaymentRegisterForm } from "@/features/home/components/PaymentRegisterForm";
 import { PaymentsResponse } from "@/models/payments";
 
 interface Props {
