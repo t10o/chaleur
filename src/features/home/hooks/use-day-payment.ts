@@ -13,7 +13,8 @@ export const useDayPayment = (date: Date) => {
     const fetch = async () => {
       const { data, error } = await fetchDayPayment(date);
 
-      if (error) throw new Error(`fetchDayPayment: ${error.message}`);
+      if (error)
+        throw new Error(`日別収支の取得に失敗しました：${error.message}`);
 
       setDayPayments(data);
     };
