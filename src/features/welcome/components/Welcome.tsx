@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { useRouter } from "next/router";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import * as z from "zod";
 
 import { insertUser } from "@/apis/users";
@@ -32,16 +32,23 @@ export const Welcome = () => {
   });
 
   const auth = useRecoilValue<AuthState>(authState);
+  const setUser = useSetRecoilState<AuthState>(authState);
 
   const router = useRouter();
 
   const onSubmit = async (data: WelcomeForm) => {
     try {
-      const error = await insertUser(data.nickname, data.like, auth.user.id);
+      const { data: user, error } = await insertUser(
+        data.nickname,
+        data.like,
+        auth.session.user.id
+      );
 
       if (error) {
         throw new Error(`ユーザー情報登録に失敗しました：${error.message}`);
       }
+
+      setUser({ session: auth.session });
 
       await router.push("/");
     } catch (error: any) {

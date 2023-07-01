@@ -14,6 +14,7 @@ import {
 } from "@/apis/payments";
 import { Button, Input, Textarea } from "@/components/elements";
 import { useHorseraceForm } from "@/features/home/hooks/use-horserace-form";
+import { useUser } from "@/hooks/use-user";
 import { HorseraceFormValue } from "@/models/horserace";
 import { PaymentsResponse } from "@/models/payments";
 import { AuthState, authState } from "@/stores/auth";
@@ -51,6 +52,7 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
   const { raceMaster, racecourseMaster } = useHorseraceForm();
 
   const auth = useRecoilValue<AuthState>(authState);
+  const { user } = useUser(auth.session.user.id);
 
   const onSubmit: SubmitHandler<HorseraceFormValue> = async (
     formData: HorseraceFormValue
@@ -71,13 +73,13 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
             formData,
             horseraceData![0].id,
             date,
-            auth.user.id
+            user!.id
           )
         : await insertPaymentForHorserace(
             formData,
             horseraceData![0].id,
             date,
-            auth.user.id
+            user!.id
           );
 
       if (error) throw new Error(`収支の保存に失敗しました：${error.message}`);

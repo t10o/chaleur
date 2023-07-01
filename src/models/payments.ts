@@ -38,5 +38,5 @@ export interface PaymentsResponse {
   pay: number;
   payback: number;
   update_at: string | null;
-  user_id: string;
+  user_id: number;
 }

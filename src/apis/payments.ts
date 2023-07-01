@@ -40,7 +40,7 @@ export const insertPaymentForPachoslo = async (
   value: PachisloFormValue,
   pachisloPaymentId: number,
   date: Date,
-  userId: string
+  userId: number
 ) => {
   const { error } = await supabase.from("payments").insert({
     date: date.toDateString(),
@@ -59,7 +59,7 @@ export const updatePaymentForPachoslo = async (
   value: PachisloFormValue,
   pachisloPaymentId: number,
   date: Date,
-  userId: string
+  userId: number
 ) => {
   const { error } = await supabase
     .from("payments")
@@ -80,7 +80,7 @@ export const insertPaymentForHorserace = async (
   value: HorseraceFormValue,
   horseracePaymentId: number,
   date: Date,
-  userId: string
+  userId: number
 ) => {
   const { error } = await supabase.from("payments").insert({
     date: date.toDateString(),
@@ -99,7 +99,7 @@ export const updatePaymentForHorserace = async (
   value: HorseraceFormValue,
   horseracePaymentId: number,
   date: Date,
-  userId: string
+  userId: number
 ) => {
   const { error } = await supabase
     .from("payments")

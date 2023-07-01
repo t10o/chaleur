@@ -18,9 +18,10 @@ export const insertUser = async (
   like: string,
   userId: string
 ) => {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("general_users")
-    .insert({ nickname: nickname, like: like, user_id: userId });
+    .insert({ nickname: nickname, like: like, user_id: userId })
+    .select();
 
-  return error;
+  return { data, error };
 };

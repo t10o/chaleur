@@ -34,8 +34,6 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     .select("*")
     .eq("user_id", session.user.id);
 
-  console.log(userData && !!userData.length);
-
   if (userData && !!userData.length) {
     return {
       redirect: {

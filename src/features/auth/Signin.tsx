@@ -53,7 +53,7 @@ export const Signin = () => {
         throw new Error(`サインインに失敗しました：${signInError.message}`);
       }
 
-      setUser({ user: loginUser.user, session: loginUser.session });
+      setUser({ session: loginUser.session });
 
       const { data: userData, error: userError } = await fetchUser(
         loginUser.user?.id
