@@ -18,8 +18,9 @@ export const useHome = () => {
     const fetch = async () => {
       const { data, error } = await fetchMonthPayments(targetMonth);
 
-      if (error)
+      if (error) {
         throw new Error(`月別収支の取得に失敗しました: ${error.message}`);
+      }
 
       setMonthPayments(data);
     };
