@@ -1,5 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { InputLabel, ToggleButton } from "@mui/material";
+import {
+  Autocomplete,
+  InputLabel,
+  TextField,
+  ToggleButton,
+} from "@mui/material";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import clsx from "clsx";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -41,6 +46,8 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
     handleSubmit,
     register,
     control,
+    watch,
+    setValue,
   } = useForm<PachisloFormValue>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -114,14 +121,82 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
     }
   };
 
+  const shopInput = shopMaster ? (
+    <Controller
+      name="shop"
+      control={control}
+      render={({ field }) => {
+        return (
+          <Autocomplete
+            className={clsx(!errors.shop && "mb-4", "rounded-lg")}
+            freeSolo
+            options={shopMaster!.map((shopMaster) => shopMaster.name)}
+            {...field}
+            renderInput={(params: any) => (
+              <TextField className={clsx("w-full")} {...params} />
+            )}
+            onChange={(event, value) => {
+              setValue("shop", value!);
+            }}
+          />
+        );
+      }}
+    />
+  ) : (
+    <Input
+      id="shop"
+      className={clsx("w-full", !errors.shop && "mb-4")}
+      {...register("shop", { required: true })}
+    />
+  );
+
+  const watchKind = watch("kind");
+
+  const filteredMachineMaster = () => {
+    const isPachinko = () => {
+      return watchKind === "pachinko";
+    };
+
+    return machineMaster!.filter((machineMaster) => {
+      return machineMaster.is_pachinko === isPachinko();
+    });
+  };
+
+  const machineInput = machineMaster ? (
+    <Controller
+      name="machine"
+      control={control}
+      render={({ field }) => {
+        return (
+          <Autocomplete
+            className={clsx(!errors.shop && "mb-4", "rounded-lg")}
+            freeSolo
+            options={filteredMachineMaster()!.map(
+              (machineMaster) => machineMaster.name
+            )}
+            {...field}
+            renderInput={(params: any) => (
+              <TextField className={clsx("w-full")} {...params} />
+            )}
+            onChange={(event, value) => {
+              setValue("machine", value!);
+            }}
+          />
+        );
+      }}
+    />
+  ) : (
+    <Input
+      id="machine"
+      className={clsx("w-full", !errors.machine && "mb-4")}
+      {...register("machine", { required: true })}
+    />
+  );
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <InputLabel id="shop">店</InputLabel>
-      <Input
-        id="shop"
-        className={clsx("w-full", !errors.shop && "mb-4")}
-        {...register("shop", { required: true })}
-      />
+      {shopInput}
       {errors.shop && (
         <p className={clsx("mb-4", "text-sm", "text-red-500")}>
           ※{errors.shop.message as string}
@@ -146,11 +221,7 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
       </div>
 
       <InputLabel id="machine">台</InputLabel>
-      <Input
-        id="machine"
-        className={clsx("w-full", !errors.machine && "mb-4")}
-        {...register("machine", { required: true })}
-      />
+      {machineInput}
       {errors.machine && (
         <p className={clsx("mb-4", "text-sm", "text-red-500")}>
           ※{errors.machine.message as string}
