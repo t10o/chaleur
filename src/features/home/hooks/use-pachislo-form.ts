@@ -43,7 +43,7 @@ export const usePachisloForm = () => {
 
     fetchMachine();
     fetchShop();
-  });
+  }, []);
 
   return { machineMaster, machineNames, shopMaster, shopNames };
 };

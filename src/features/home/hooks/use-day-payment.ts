@@ -8,6 +8,7 @@ export const useDayPayment = (date: Date) => {
     null
   );
   const [isOpen, setIsOpen] = useState(false);
+  const [isRefetch, setIsRefetch] = useState(false);
 
   useEffect(() => {
     const fetch = async () => {
@@ -24,5 +25,28 @@ export const useDayPayment = (date: Date) => {
     // 入力後の値をカレンダーに反映したいから isOpen を監視してる
   }, [isOpen]);
 
-  return { dayPayments, isOpen, setIsOpen };
+  // データの編集・削除がされた時に再フェッチする。この実装なんかダサくないか
+  useEffect(() => {
+    if (!isRefetch) return;
+
+    const fetch = async () => {
+      const { data, error } = await fetchDayPayment(date);
+
+      if (error) {
+        throw new Error(`日別収支の取得に失敗しました：${error.message}`);
+      }
+
+      setDayPayments(data);
+    };
+
+    fetch();
+    setIsRefetch(false);
+  }, [isRefetch]);
+
+  return {
+    dayPayments,
+    isOpen,
+    setIsOpen,
+    setIsRefetch,
+  };
 };

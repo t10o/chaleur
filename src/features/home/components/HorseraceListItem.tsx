@@ -17,9 +17,10 @@ import { PaymentsResponse } from "@/models/payments";
 interface Props {
   data: PaymentsResponse;
   date: Date;
+  onDataChange: () => void;
 }
 
-export const HorseraceListItem = ({ data, date }: Props) => {
+export const HorseraceListItem = ({ data, date, onDataChange }: Props) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -33,6 +34,7 @@ export const HorseraceListItem = ({ data, date }: Props) => {
 
   const handleFormModalClose = () => {
     setIsFormOpen(false);
+    onDataChange();
   };
 
   const handleDialogClose = () => {
@@ -63,6 +65,7 @@ export const HorseraceListItem = ({ data, date }: Props) => {
 
       toast.success("削除しました");
       setIsDialogOpen(false);
+      onDataChange();
     } catch (error: any) {
       toast.error(error.message);
     }

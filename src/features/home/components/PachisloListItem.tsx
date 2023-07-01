@@ -17,11 +17,12 @@ import { PaymentsResponse } from "@/models/payments";
 interface Props {
   data: PaymentsResponse;
   date: Date;
+  onDataChange: () => void;
 }
 
-export const PachisloListItem = ({ data, date }: Props) => {
+export const PachisloListItem = ({ data, date, onDataChange }: Props) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const isWin = (payment: number) => {
     return payment >= 0;
@@ -33,14 +34,15 @@ export const PachisloListItem = ({ data, date }: Props) => {
 
   const handleFormModalClose = () => {
     setIsFormOpen(false);
+    onDataChange();
   };
 
   const handleDialogClose = () => {
-    setIsConfirmOpen(false);
+    setIsDialogOpen(false);
   };
 
   const handleDeleteClick = async () => {
-    setIsConfirmOpen(true);
+    setIsDialogOpen(true);
   };
 
   const handleDelete = async () => {
@@ -60,7 +62,8 @@ export const PachisloListItem = ({ data, date }: Props) => {
         );
 
       toast.success("削除しました");
-      setIsConfirmOpen(false);
+      setIsDialogOpen(false);
+      onDataChange();
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -116,7 +119,7 @@ export const PachisloListItem = ({ data, date }: Props) => {
       </Modal>
 
       <Dialog
-        isOpen={isConfirmOpen}
+        isOpen={isDialogOpen}
         title="なんで消すん？"
         message="負けたの隠そうってことなら消さんといてください。"
         onRequestClose={handleDialogClose}

@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const DayPayment = ({ date, onCloseClick }: Props) => {
-  const { dayPayments, isOpen, setIsOpen } = useDayPayment(date);
+  const { dayPayments, isOpen, setIsOpen, setIsRefetch } = useDayPayment(date);
 
   const handleClick = () => {
     setIsOpen(true);
@@ -23,6 +23,10 @@ export const DayPayment = ({ date, onCloseClick }: Props) => {
 
   const handleModalClose = () => {
     setIsOpen(false);
+  };
+
+  const handleDataChange = () => {
+    setIsRefetch(true);
   };
 
   return (
@@ -42,12 +46,14 @@ export const DayPayment = ({ date, onCloseClick }: Props) => {
               data={dayPayment}
               date={date}
               key={dayPayment.id}
+              onDataChange={handleDataChange}
             />
           ) : (
             <HorseraceListItem
               data={dayPayment}
               date={date}
               key={dayPayment.id}
+              onDataChange={handleDataChange}
             />
           );
         })}

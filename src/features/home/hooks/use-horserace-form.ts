@@ -34,7 +34,7 @@ export const useHorseraceForm = () => {
 
     fetchRace();
     fetchRacecourse();
-  });
+  }, []);
 
   return {
     raceMaster,
