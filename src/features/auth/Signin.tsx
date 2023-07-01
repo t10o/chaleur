@@ -4,9 +4,11 @@ import clsx from "clsx";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import { useSetRecoilState } from "recoil";
 import * as z from "zod";
 
+import { fetchUser } from "@/apis/users";
 import { Input, PrimaryButton } from "@/components/elements";
 import { AuthState, authState } from "@/stores/auth";
 import { Database } from "@/types/schema";
@@ -48,14 +50,28 @@ export const Signin = () => {
         });
 
       if (signInError) {
-        throw signInError;
+        throw new Error(`サインインに失敗しました：${signInError.message}`);
       }
 
       setUser({ user: loginUser.user, session: loginUser.session });
 
-      await router.push("/");
-    } catch (error) {
-      alert("エラーが発生しました");
+      const { data: userData, error: userError } = await fetchUser(
+        loginUser.user?.id
+      );
+
+      if (userError) {
+        throw new Error(
+          `ユーザー情報の取得に失敗しました：${userError.message}`
+        );
+      }
+
+      if (!userData || !userData.length) {
+        await router.push("/welcome");
+      } else {
+        await router.push("/");
+      }
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
 
