@@ -31,11 +31,11 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
     race: z.string().min(1, { message: "レースを入力してください" }),
     pay: z.preprocess(
       (v) => Number(v),
-      z.number().min(1, { message: "投資を入力してください" })
+      z.number().min(0, { message: "投資を入力してください" })
     ),
     payback: z.preprocess(
       (v) => Number(v),
-      z.number().min(1, { message: "回収を入力してください" })
+      z.number().min(0, { message: "回収を入力してください" })
     ),
   });
 
