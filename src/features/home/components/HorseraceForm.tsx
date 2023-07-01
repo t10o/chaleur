@@ -29,8 +29,14 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
   const schema = z.object({
     racecourse: z.string().min(1, { message: "会場を入力してください。" }),
     race: z.string().min(1, { message: "レースを入力してください" }),
-    pay: z.string().min(1, { message: "投資を入力してください" }),
-    payback: z.string().min(1, { message: "回収を入力してください" }),
+    pay: z.preprocess(
+      (v) => Number(v),
+      z.number().min(1, { message: "投資を入力してください" })
+    ),
+    payback: z.preprocess(
+      (v) => Number(v),
+      z.number().min(1, { message: "回収を入力してください" })
+    ),
   });
 
   const {
