@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "yarn typegen && next build",
     "start": "next start",
     "lint": "next lint",
     "typegen": "supabase gen types typescript --linked > src/types/schema.ts"
