@@ -1,22 +1,20 @@
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 
-import { MachineResponse } from "@/models/machine";
+import { fetchMachineMaster } from "@/apis/machine";
+import { fetchShopMaster } from "@/apis/shop";
 import { PachisloFormValue } from "@/models/pachislo";
-import { ShopResponse } from "@/models/shop";
 import { Database } from "@/types/schema";
 
 const supabase = createPagesBrowserClient<Database>();
 
-export const insertPachoslo = async (
-  value: PachisloFormValue,
-  machineMaster: MachineResponse[],
-  shopMaster: ShopResponse[]
-) => {
-  const targetMachine = machineMaster.filter(
+export const insertPachoslo = async (value: PachisloFormValue) => {
+  const { machineMaster, shopMaster } = await fetchMasters();
+
+  const targetMachine = machineMaster!.filter(
     (machine) => machine.name === value.machine
   );
 
-  const targetShop = shopMaster.filter((shop) => shop.name === value.shop);
+  const targetShop = shopMaster!.filter((shop) => shop.name === value.shop);
 
   const machineId = targetMachine[0].id;
   const shopId = targetShop[0].id;
@@ -29,17 +27,14 @@ export const insertPachoslo = async (
   return { data, error };
 };
 
-export const updatePachislo = async (
-  id: number,
-  value: PachisloFormValue,
-  machineMaster: MachineResponse[],
-  shopMaster: ShopResponse[]
-) => {
-  const targetMachine = machineMaster.filter(
+export const updatePachislo = async (id: number, value: PachisloFormValue) => {
+  const { machineMaster, shopMaster } = await fetchMasters();
+
+  const targetMachine = machineMaster!.filter(
     (machine) => machine.name === value.machine
   );
 
-  const targetShop = shopMaster.filter((shop) => shop.name === value.shop);
+  const targetShop = shopMaster!.filter((shop) => shop.name === value.shop);
 
   const machineId = targetMachine[0].id;
   const shopId = targetShop[0].id;
@@ -60,4 +55,14 @@ export const deletePachislo = async (id: number) => {
     .eq("id", id);
 
   return { error };
+};
+
+const fetchMasters = async () => {
+  const { data: machineMaster } = await fetchMachineMaster();
+  const { data: shopMaster } = await fetchShopMaster();
+
+  return {
+    machineMaster,
+    shopMaster,
+  };
 };

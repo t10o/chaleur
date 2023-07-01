@@ -13,8 +13,7 @@ import {
   updatePaymentForHorserace,
 } from "@/apis/payments";
 import { Button, Input, Textarea } from "@/components/elements";
-import { useRace } from "@/features/home/hooks/use-race";
-import { useRacecourse } from "@/features/home/hooks/use-racecourse";
+import { useHorseraceForm } from "@/features/home/hooks/use-horserace-form";
 import { HorseraceFormValue } from "@/models/horserace";
 import { PaymentsResponse } from "@/models/payments";
 import { AuthState, authState } from "@/stores/auth";
@@ -49,19 +48,9 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
     },
   });
 
-  const { racecourseMaster, error: racecourseError } = useRacecourse();
-
-  const { raceMaster, error: raceError } = useRace();
+  const { raceMaster, racecourseMaster } = useHorseraceForm();
 
   const auth = useRecoilValue<AuthState>(authState);
-
-  if (racecourseError || !racecourseMaster) {
-    return <div>Error: Racecourse Master Fetch Failed</div>;
-  }
-
-  if (raceError || !raceMaster) {
-    return <div>Error: Race Master Fetch Failed</div>;
-  }
 
   const onSubmit: SubmitHandler<HorseraceFormValue> = async (
     formData: HorseraceFormValue
@@ -115,13 +104,14 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
               label="会場"
               {...field}
             >
-              {racecourseMaster.map((racecourse) => {
-                return (
-                  <MenuItem key={racecourse.id} value={`${racecourse.id}`}>
-                    {racecourse.name}
-                  </MenuItem>
-                );
-              })}
+              {racecourseMaster &&
+                racecourseMaster.map((racecourse) => {
+                  return (
+                    <MenuItem key={racecourse.id} value={`${racecourse.id}`}>
+                      {racecourse.name}
+                    </MenuItem>
+                  );
+                })}
             </Select>
           );
         }}
@@ -145,13 +135,14 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
               label="会場"
               {...field}
             >
-              {raceMaster.map((race) => {
-                return (
-                  <MenuItem key={race.id} value={`${race.id}`}>
-                    {race.name}
-                  </MenuItem>
-                );
-              })}
+              {raceMaster &&
+                raceMaster.map((race) => {
+                  return (
+                    <MenuItem key={race.id} value={`${race.id}`}>
+                      {race.name}
+                    </MenuItem>
+                  );
+                })}
             </Select>
           );
         }}

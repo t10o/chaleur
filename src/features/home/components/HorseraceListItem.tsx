@@ -21,7 +21,7 @@ interface Props {
 
 export const HorseraceListItem = ({ data, date }: Props) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const isWin = (payment: number) => {
     return payment >= 0;
@@ -36,11 +36,11 @@ export const HorseraceListItem = ({ data, date }: Props) => {
   };
 
   const handleDialogClose = () => {
-    setIsConfirmOpen(false);
+    setIsDialogOpen(false);
   };
 
   const handleDeleteClick = async () => {
-    setIsConfirmOpen(true);
+    setIsDialogOpen(true);
   };
 
   const handleDelete = async () => {
@@ -55,13 +55,14 @@ export const HorseraceListItem = ({ data, date }: Props) => {
         data.horserace_payment_id!
       );
 
-      if (horseraceError)
+      if (horseraceError) {
         throw new Error(
           `競馬収支の削除に失敗しました：${horseraceError.message}`
         );
+      }
 
       toast.success("削除しました");
-      setIsConfirmOpen(false);
+      setIsDialogOpen(false);
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -117,7 +118,7 @@ export const HorseraceListItem = ({ data, date }: Props) => {
       </Modal>
 
       <Dialog
-        isOpen={isConfirmOpen}
+        isOpen={isDialogOpen}
         title="なんで消すん？"
         message="負けたの隠そうってことなら消さんといてください。"
         onRequestClose={handleDialogClose}
