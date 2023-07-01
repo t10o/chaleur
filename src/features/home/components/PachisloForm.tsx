@@ -268,9 +268,9 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
       />
 
       <Button
-        className={clsx("w-full", "text-lg")}
+        className={clsx("w-full", "bg-primary", "text-white")}
         type="submit"
-        label="Submit"
+        label="登録"
       />
     </form>
   );

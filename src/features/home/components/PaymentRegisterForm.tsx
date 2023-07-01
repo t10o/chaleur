@@ -1,8 +1,11 @@
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ToggleButton } from "@mui/material";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 
+import { Button } from "@/components/elements";
 import { HorseraceForm } from "@/features/home/components/HorseraceForm";
 import { PachisloForm } from "@/features/home/components/PachisloForm";
 import { PaymentsResponse } from "@/models/payments";
@@ -45,7 +48,7 @@ export const PaymentRegisterForm = ({
       <p
         className={clsx(
           "flex",
-          "justify-center",
+          "justify-between",
           "items-center",
           "mb-8",
           "text-lg",
@@ -53,6 +56,10 @@ export const PaymentRegisterForm = ({
         )}
       >
         {formatJpYmd(date)}
+
+        <Button onClick={onUpdated}>
+          <FontAwesomeIcon icon={faXmark} />
+        </Button>
       </p>
 
       <ToggleButtonGroup
