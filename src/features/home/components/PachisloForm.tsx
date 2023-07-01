@@ -176,7 +176,13 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
             )}
             {...field}
             renderInput={(params: any) => (
-              <TextField className={clsx("w-full")} {...params} />
+              <TextField
+                className={clsx("w-full")}
+                {...params}
+                onChange={(event) => {
+                  setValue("machine", event.target.value);
+                }}
+              />
             )}
             onChange={(event, value) => {
               setValue("machine", value!);
