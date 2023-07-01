@@ -7,7 +7,7 @@ import { Database } from "@/types/schema";
 
 export default function HomePage() {
   return (
-    <ContentLayout pageTitle="MyPage">
+    <ContentLayout pageTitle="Home">
       <Home />
     </ContentLayout>
   );
