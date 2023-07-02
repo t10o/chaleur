@@ -2,11 +2,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Autocomplete,
   InputLabel,
+  MenuItem,
+  Select,
   TextField,
   ToggleButton,
 } from "@mui/material";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import clsx from "clsx";
+import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
@@ -35,7 +38,7 @@ interface Props {
 
 export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
   const schema = z.object({
-    shop: z.string().min(1, { message: "店を入力してください。" }),
+    shop: z.string().min(1, { message: "店を入力してください" }),
     machine: z.string().min(1, { message: "台を入力してください" }),
     kind: z.string(),
     pay: z.preprocess(
@@ -46,6 +49,8 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
       (v) => Number(v),
       z.number().min(0, { message: "回収を入力してください" })
     ),
+    memo: z.string().optional(),
+    rate: z.string().min(1, { message: "レートを選んでください" }),
   });
 
   const {
@@ -64,14 +69,34 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
       pay: data && `${data.pay}`,
       payback: data && `${data.payback}`,
       memo: data && data.memo ? data.memo : undefined,
+      // TODO: 初期値をkindによって変えたい
+      rate: data ? `${data.pachislo_payments?.rate.id}` : "1",
     },
   });
 
-  const { machineMaster, machineNames, shopMaster, shopNames } =
+  const { machineMaster, machineNames, shopMaster, shopNames, rateMaster } =
     usePachisloForm();
 
   const auth = useRecoilValue<AuthState>(authState);
   const { user } = useUser(auth.session.user.id);
+
+  const watchKind = watch("kind");
+
+  const isPachinko = () => {
+    return watchKind === "pachinko";
+  };
+
+  const filteredMachineMaster = () => {
+    return machineMaster!.filter((machineMaster) => {
+      return machineMaster.is_pachinko === isPachinko();
+    });
+  };
+
+  const filteredRateMaster = () => {
+    return rateMaster!.filter((rateMaster) => {
+      return rateMaster.is_pachinko === isPachinko();
+    });
+  };
 
   const onSubmit: SubmitHandler<PachisloFormValue> = async (
     formData: PachisloFormValue
@@ -158,18 +183,6 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
     />
   );
 
-  const watchKind = watch("kind");
-
-  const filteredMachineMaster = () => {
-    const isPachinko = () => {
-      return watchKind === "pachinko";
-    };
-
-    return machineMaster!.filter((machineMaster) => {
-      return machineMaster.is_pachinko === isPachinko();
-    });
-  };
-
   const machineInput = machineMaster ? (
     <Controller
       name="machine"
@@ -239,6 +252,37 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
       {errors.machine && (
         <p className={clsx("mb-4", "text-sm", "text-red-500")}>
           ※{errors.machine.message as string}
+        </p>
+      )}
+
+      <InputLabel id="rate">レート</InputLabel>
+      <Controller
+        name="rate"
+        control={control}
+        render={({ field }) => {
+          return (
+            <Select
+              className={clsx(!errors.rate && "mb-4")}
+              labelId="rate"
+              id="rate"
+              label="レート"
+              {...field}
+            >
+              {rateMaster &&
+                filteredRateMaster().map((rate) => {
+                  return (
+                    <MenuItem key={rate.id} value={`${rate.id}`}>
+                      {rate.name}
+                    </MenuItem>
+                  );
+                })}
+            </Select>
+          );
+        }}
+      />
+      {errors.rate && (
+        <p className={clsx("mb-4", "text-sm", "text-red-500")}>
+          ※{errors.rate.message as string}
         </p>
       )}
 

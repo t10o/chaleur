@@ -17,7 +17,7 @@ export const fetchMonthPayments = async (date: Date) => {
   const { data, error } = await supabase
     .from("payments")
     .select(
-      "*, pachislo_payments(*, machine(*), shop(*)), horserace_payments(*, race(*), racecourse(*))"
+      "*, pachislo_payments(*, machine(*), shop(*), rate(*)), horserace_payments(*, race(*), racecourse(*))"
     )
     .lte("date", lastDate.toDateString())
     .gte("date", firstDate.toDateString());
@@ -29,7 +29,7 @@ export const fetchDayPayment = async (date: Date) => {
   const { data, error } = await supabase
     .from("payments")
     .select(
-      "*, pachislo_payments(*, machine(*), shop(*)), horserace_payments(*, race(*), racecourse(*))"
+      "*, pachislo_payments(*, machine(*), shop(*), rate(*)), horserace_payments(*, race(*), racecourse(*))"
     )
     .eq("date", date.toDateString());
 

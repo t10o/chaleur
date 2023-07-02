@@ -126,6 +126,7 @@ export interface Database {
           id: number
           kind: string
           machine: number
+          rate: number
           shop: number
           update_at: string | null
         }
@@ -134,6 +135,7 @@ export interface Database {
           id?: number
           kind: string
           machine: number
+          rate: number
           shop: number
           update_at?: string | null
         }
@@ -142,6 +144,7 @@ export interface Database {
           id?: number
           kind?: string
           machine?: number
+          rate?: number
           shop?: number
           update_at?: string | null
         }
@@ -150,6 +153,12 @@ export interface Database {
             foreignKeyName: "pachislo_payments_machine_fkey"
             columns: ["machine"]
             referencedRelation: "machine"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pachislo_payments_rate_fkey"
+            columns: ["rate"]
+            referencedRelation: "rate"
             referencedColumns: ["id"]
           },
           {
@@ -244,6 +253,27 @@ export interface Database {
         Update: {
           created_at?: string | null
           id?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      rate: {
+        Row: {
+          created_at: string | null
+          id: number
+          is_pachinko: boolean
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          is_pachinko: boolean
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          is_pachinko?: boolean
           name?: string
         }
         Relationships: []
