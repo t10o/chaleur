@@ -24,7 +24,7 @@ export default function HomePage({ user }: Props) {
         like: loginUser!.like,
       });
     }
-  }, []);
+  }, [loginUser]);
 
   return (
     <ContentLayout pageTitle="Home">

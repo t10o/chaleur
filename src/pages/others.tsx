@@ -24,7 +24,7 @@ export default function RankingPage({ user }: Props) {
         like: loginUser!.like,
       });
     }
-  }, []);
+  }, [loginUser]);
 
   return (
     <ContentLayout pageTitle="Others">
