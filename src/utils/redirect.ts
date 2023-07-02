@@ -8,8 +8,6 @@ export const redirect: GetServerSideProps = async (
 ) => {
   const supabase = createPagesServerClient<Database>(ctx);
 
-  console.log(ctx.resolvedUrl);
-
   const {
     data: { session },
   } = await supabase.auth.getSession();

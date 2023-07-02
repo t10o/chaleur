@@ -24,7 +24,7 @@ export default function NewsPage({ user }: Props) {
         like: loginUser!.like,
       });
     }
-  }, []);
+  }, [loginUser]);
 
   return (
     <ContentLayout pageTitle="News">
