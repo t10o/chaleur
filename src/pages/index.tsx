@@ -26,6 +26,8 @@ export default function HomePage({ user }: Props) {
     }
   }, [loginUser]);
 
+  // TODO: loginUserが取得できるまでLoadingにする
+
   return (
     <ContentLayout pageTitle="Home">
       <Home />
