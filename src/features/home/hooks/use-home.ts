@@ -27,7 +27,7 @@ export const useHome = (userId: number) => {
 
     fetch();
     // 入力後の値をカレンダーに反映したいから isOpen を監視してる
-  }, [targetMonth, isOpen]);
+  }, [targetMonth, isOpen, userId]);
 
   useEffect(() => {
     if (!monthPayments) return;

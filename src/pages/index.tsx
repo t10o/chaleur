@@ -14,7 +14,6 @@ interface Props {
 
 export default function HomePage({ user }: Props) {
   const { user: loginUser } = useUser(user.id);
-  console.log(loginUser);
   const setUser = useSetRecoilState<AuthState>(authState);
 
   useEffect(() => {
@@ -25,7 +24,7 @@ export default function HomePage({ user }: Props) {
         like: loginUser!.like,
       });
     }
-  }, [loginUser, setUser]);
+  }, [loginUser]);
 
   const auth = useRecoilValue<AuthState>(authState);
   console.log(auth);
