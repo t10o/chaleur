@@ -25,7 +25,7 @@ export default function HomePage({ user }: Props) {
         like: loginUser!.like,
       });
     }
-  }, [loginUser]);
+  }, [loginUser, setUser]);
 
   const auth = useRecoilValue<AuthState>(authState);
   console.log(auth);
