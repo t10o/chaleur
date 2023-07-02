@@ -5,12 +5,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { useSetRecoilState } from "recoil";
 import * as z from "zod";
 
 import { fetchUser } from "@/apis/users";
 import { Input, PrimaryButton } from "@/components/elements";
-import { AuthState, authState } from "@/stores/auth";
 import { Database } from "@/types/schema";
 
 interface SigninForm {
@@ -39,8 +37,6 @@ export const Signin = () => {
 
   const router = useRouter();
 
-  const setUser = useSetRecoilState<AuthState>(authState);
-
   const onSubmit = async (data: SigninForm) => {
     try {
       const { data: loginUser, error: signInError } =
@@ -52,8 +48,6 @@ export const Signin = () => {
       if (signInError) {
         throw new Error(`サインインに失敗しました：${signInError.message}`);
       }
-
-      setUser({ session: loginUser.session });
 
       const { data: userData, error: userError } = await fetchUser(
         loginUser.user?.id

@@ -6,7 +6,7 @@ import { Database } from "@/types/schema";
 
 const supabase = createPagesBrowserClient<Database>();
 
-export const fetchMonthPayments = async (date: Date) => {
+export const fetchMonthPayments = async (date: Date, userId: number) => {
   const lastDate = new Date(date);
   lastDate.setMonth(date.getMonth() + 1);
   lastDate.setDate(0);
@@ -19,19 +19,21 @@ export const fetchMonthPayments = async (date: Date) => {
     .select(
       "*, pachislo_payments(*, machine(*), shop(*), rate(*)), horserace_payments(*, race(*), racecourse(*))"
     )
+    .eq("user_id", userId)
     .lte("date", lastDate.toDateString())
     .gte("date", firstDate.toDateString());
 
   return { data, error };
 };
 
-export const fetchDayPayment = async (date: Date) => {
+export const fetchDayPayment = async (date: Date, userId: number) => {
   const { data, error } = await supabase
     .from("payments")
     .select(
       "*, pachislo_payments(*, machine(*), shop(*), rate(*)), horserace_payments(*, race(*), racecourse(*))"
     )
-    .eq("date", date.toDateString());
+    .eq("date", date.toDateString())
+    .eq("user_id", userId);
 
   return { data, error };
 };

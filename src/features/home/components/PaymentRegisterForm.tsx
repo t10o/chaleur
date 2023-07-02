@@ -9,7 +9,6 @@ import { useRecoilValue } from "recoil";
 import { Button } from "@/components/elements";
 import { HorseraceForm } from "@/features/home/components/HorseraceForm";
 import { PachisloForm } from "@/features/home/components/PachisloForm";
-import { useUser } from "@/hooks/use-user";
 import { PaymentsResponse } from "@/models/payments";
 import { AuthState, authState } from "@/stores/auth";
 import { formatJpYmd } from "@/utils/date";
@@ -28,7 +27,6 @@ export const PaymentRegisterForm = ({
   const [gamble, setGamble] = useState<"pachislo" | "horserace">("pachislo");
 
   const auth = useRecoilValue<AuthState>(authState);
-  const { user } = useUser(auth.session.user.id);
 
   useEffect(() => {
     if (data) {
@@ -38,11 +36,9 @@ export const PaymentRegisterForm = ({
         setGamble("pachislo");
       }
     } else {
-      user && user.like
-        ? setGamble(user!.like as "pachislo" | "horserace")
-        : gamble;
+      setGamble(auth.like as "pachislo" | "horserace");
     }
-  }, [user]);
+  }, []);
 
   const isPachislo = gamble === "pachislo";
 

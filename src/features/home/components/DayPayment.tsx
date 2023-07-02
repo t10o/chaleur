@@ -1,12 +1,14 @@
 import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
+import { useRecoilValue } from "recoil";
 
 import { Button, Modal } from "@/components/elements";
 import { HorseraceListItem } from "@/features/home/components/HorseraceListItem";
 import { PachisloListItem } from "@/features/home/components/PachisloListItem";
 import { PaymentRegisterForm } from "@/features/home/components/PaymentRegisterForm";
 import { useDayPayment } from "@/features/home/hooks/use-day-payment";
+import { AuthState, authState } from "@/stores/auth";
 import { formatJpYmd } from "@/utils/date";
 
 interface Props {
@@ -15,7 +17,12 @@ interface Props {
 }
 
 export const DayPayment = ({ date, onCloseClick }: Props) => {
-  const { dayPayments, isOpen, setIsOpen, setIsRefetch } = useDayPayment(date);
+  const auth = useRecoilValue<AuthState>(authState);
+
+  const { dayPayments, isOpen, setIsOpen, setIsRefetch } = useDayPayment(
+    date,
+    auth.id
+  );
 
   const handleClick = () => {
     setIsOpen(true);

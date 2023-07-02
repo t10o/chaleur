@@ -1,11 +1,31 @@
-import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
-import { GetServerSidePropsContext } from "next";
+import { User } from "@supabase/auth-helpers-nextjs";
+import { useEffect } from "react";
+import { useSetRecoilState } from "recoil";
 
 import { ContentLayout } from "@/components/layouts";
 import { Ranking } from "@/features/ranking";
-import { Database } from "@/types/schema";
+import { useUser } from "@/hooks/use-user";
+import { AuthState, authState } from "@/stores/auth";
+import { redirect } from "@/utils/redirect";
 
-export default function RankingPage() {
+interface Props {
+  user: User;
+}
+
+export default function RankingPage({ user }: Props) {
+  const { user: loginUser } = useUser(user.id);
+  const setUser = useSetRecoilState<AuthState>(authState);
+
+  useEffect(() => {
+    if (loginUser) {
+      setUser({
+        id: loginUser!.id,
+        nickname: loginUser!.nickname,
+        like: loginUser!.like,
+      });
+    }
+  }, []);
+
   return (
     <ContentLayout pageTitle="Ranking">
       <Ranking />
@@ -13,29 +33,4 @@ export default function RankingPage() {
   );
 }
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const supabase = createPagesServerClient<Database>(ctx);
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/auth/signin",
-        permanent: false,
-      },
-    };
-  }
-
-  const { data } = await supabase.from("users").select("*");
-
-  return {
-    props: {
-      initialSession: session,
-      user: session.user,
-      data: data ?? [],
-    },
-  };
-};
+export const getServerSideProps = redirect;
