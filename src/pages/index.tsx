@@ -1,6 +1,6 @@
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 
 import { ContentLayout } from "@/components/layouts";
 import { Home } from "@/features/home";
@@ -25,9 +25,6 @@ export default function HomePage({ user }: Props) {
       });
     }
   }, [loginUser]);
-
-  const auth = useRecoilValue<AuthState>(authState);
-  console.log(auth);
 
   return (
     <ContentLayout pageTitle="Home">
