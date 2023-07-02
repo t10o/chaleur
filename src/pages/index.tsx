@@ -1,11 +1,31 @@
-import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
-import { GetServerSidePropsContext } from "next";
+import { User } from "@supabase/auth-helpers-nextjs";
+import { useEffect } from "react";
+import { useSetRecoilState } from "recoil";
 
 import { ContentLayout } from "@/components/layouts";
 import { Home } from "@/features/home";
-import { Database } from "@/types/schema";
+import { useUser } from "@/hooks/use-user";
+import { AuthState, authState } from "@/stores/auth";
+import { redirect } from "@/utils/redirect";
 
-export default function HomePage() {
+interface Props {
+  user: User;
+}
+
+export default function HomePage({ user }: Props) {
+  const { user: loginUser } = useUser(user.id);
+  const setUser = useSetRecoilState<AuthState>(authState);
+
+  useEffect(() => {
+    if (loginUser) {
+      setUser({
+        id: loginUser!.id,
+        nickname: loginUser!.nickname,
+        like: loginUser!.like,
+      });
+    }
+  }, []);
+
   return (
     <ContentLayout pageTitle="Home">
       <Home />
@@ -13,29 +33,4 @@ export default function HomePage() {
   );
 }
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const supabase = createPagesServerClient<Database>(ctx);
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/auth/signin",
-        permanent: false,
-      },
-    };
-  }
-
-  const { data } = await supabase.from("users").select("*");
-
-  return {
-    props: {
-      initialSession: session,
-      user: session.user,
-      data: data ?? [],
-    },
-  };
-};
+export const getServerSideProps = redirect;

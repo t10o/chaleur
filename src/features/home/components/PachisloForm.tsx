@@ -25,7 +25,6 @@ import { insertShopMaster } from "@/apis/shop";
 import { Button, Textarea } from "@/components/elements";
 import { Input } from "@/components/elements/Input";
 import { usePachisloForm } from "@/features/home/hooks/use-pachislo-form";
-import { useUser } from "@/hooks/use-user";
 import { PachisloFormValue } from "@/models/pachislo";
 import { PaymentsResponse } from "@/models/payments";
 import { AuthState, authState } from "@/stores/auth";
@@ -78,7 +77,6 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
     usePachisloForm();
 
   const auth = useRecoilValue<AuthState>(authState);
-  const { user } = useUser(auth.session.user.id);
 
   const watchKind = watch("kind");
 
@@ -136,13 +134,13 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
             formData,
             pachisloData![0].id,
             date,
-            user!.id
+            auth.id
           )
         : await insertPaymentForPachoslo(
             formData,
             pachisloData![0].id,
             date,
-            user!.id
+            auth.id
           );
 
       if (error) throw new Error(`収支の保存に失敗しました：${error.message}`);

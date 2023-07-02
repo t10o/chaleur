@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { fetchDayPayment } from "@/apis/payments";
 import { PaymentsResponse } from "@/models/payments";
 
-export const useDayPayment = (date: Date) => {
+export const useDayPayment = (date: Date, userId: number) => {
   const [dayPayments, setDayPayments] = useState<PaymentsResponse[] | null>(
     null
   );
@@ -12,7 +12,7 @@ export const useDayPayment = (date: Date) => {
 
   useEffect(() => {
     const fetch = async () => {
-      const { data, error } = await fetchDayPayment(date);
+      const { data, error } = await fetchDayPayment(date, userId);
 
       if (error) {
         throw new Error(`日別収支の取得に失敗しました：${error.message}`);
@@ -22,15 +22,15 @@ export const useDayPayment = (date: Date) => {
     };
 
     fetch();
-    // 入力後の値をカレンダーに反映したいから isOpen を監視してる
+    // TODO: 入力後の値をカレンダーに反映したいから isOpen を監視してるけど多分そうじゃない
   }, [isOpen]);
 
-  // データの編集・削除がされた時に再フェッチする。この実装なんかダサくないか
+  // TODO: データの編集・削除がされた時に再フェッチする。この実装なんかダサくないか
   useEffect(() => {
     if (!isRefetch) return;
 
     const fetch = async () => {
-      const { data, error } = await fetchDayPayment(date);
+      const { data, error } = await fetchDayPayment(date, userId);
 
       if (error) {
         throw new Error(`日別収支の取得に失敗しました：${error.message}`);

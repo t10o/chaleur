@@ -5,7 +5,7 @@ import { fetchMonthPayments } from "@/apis/payments";
 import { CalendarEvent } from "@/components/elements";
 import { PaymentsResponse } from "@/models/payments";
 
-export const useHome = () => {
+export const useHome = (userId: number) => {
   const [monthPayments, setMonthPayments] = useState<PaymentsResponse[] | null>(
     null
   );
@@ -16,7 +16,7 @@ export const useHome = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      const { data, error } = await fetchMonthPayments(targetMonth);
+      const { data, error } = await fetchMonthPayments(targetMonth, userId);
 
       if (error) {
         throw new Error(`月別収支の取得に失敗しました: ${error.message}`);

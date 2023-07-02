@@ -1,55 +1,19 @@
-import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
-import { GetServerSidePropsContext } from "next";
+import { User } from "@supabase/auth-helpers-nextjs";
 
 import { ContentLayout } from "@/components/layouts";
 import { Welcome } from "@/features/welcome";
-import { Database } from "@/types/schema";
+import { redirect } from "@/utils/redirect";
 
-export default function WelcomePage() {
+interface Props {
+  user: User;
+}
+
+export default function WelcomePage({ user }: Props) {
   return (
     <ContentLayout pageTitle="Welcome!">
-      <Welcome />
+      <Welcome user={user} />
     </ContentLayout>
   );
 }
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const supabase = createPagesServerClient<Database>(ctx);
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/auth/signin",
-        permanent: false,
-      },
-    };
-  }
-
-  const { data: userData } = await supabase
-    .from("general_users")
-    .select("*")
-    .eq("user_id", session.user.id);
-
-  if (userData && !!userData.length) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-
-  const { data } = await supabase.from("users").select("*");
-
-  return {
-    props: {
-      initialSession: session,
-      user: session.user,
-      data: data ?? [],
-    },
-  };
-};
+export const getServerSideProps = redirect;

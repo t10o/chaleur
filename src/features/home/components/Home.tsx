@@ -1,12 +1,16 @@
 import { DatesSetArg } from "@fullcalendar/core";
 import { DateClickArg } from "@fullcalendar/interaction";
+import { useRecoilValue } from "recoil";
 
 import { Calender, Modal } from "@/components/elements";
 import { DayPayment } from "@/features/home/components/DayPayment";
 import { useHome } from "@/features/home/hooks/use-home";
+import { AuthState, authState } from "@/stores/auth";
 import { getThisMonth } from "@/utils/date";
 
 export const Home = () => {
+  const auth = useRecoilValue<AuthState>(authState);
+
   const {
     events,
     isOpen,
@@ -15,7 +19,7 @@ export const Home = () => {
     setSelectedDate,
     targetMonth,
     setTargetMonth,
-  } = useHome();
+  } = useHome(auth.id);
 
   const handleDateClick = (arg: DateClickArg) => {
     setSelectedDate(arg.date);
