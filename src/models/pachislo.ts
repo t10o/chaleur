@@ -5,4 +5,5 @@ export interface PachisloFormValue {
   pay: string;
   payback: string;
   memo: string;
+  rate: string;
 }

@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 import { fetchMachineMaster } from "@/apis/machine";
+import { fetchRateMaster } from "@/apis/rate";
 import { fetchShopMaster } from "@/apis/shop";
 import { MachineResponse } from "@/models/machine";
+import { RateResponse } from "@/models/rate";
 import { ShopResponse } from "@/models/shop";
 
 export const usePachisloForm = () => {
@@ -13,6 +15,7 @@ export const usePachisloForm = () => {
   const [machineNames, setMachineNames] = useState<string[] | null>(null);
   const [shopMaster, setShopMaster] = useState<ShopResponse[] | null>(null);
   const [shopNames, setShopNames] = useState<string[] | null>(null);
+  const [rateMaster, setRateMaster] = useState<RateResponse[] | null>(null);
 
   useEffect(() => {
     const fetchMachine = async () => {
@@ -41,9 +44,20 @@ export const usePachisloForm = () => {
       setShopNames(names);
     };
 
+    const fetchRate = async () => {
+      const { data, error } = await fetchRateMaster();
+
+      if (error) {
+        toast.error(`レートマスタの取得に失敗しました：${error.message}`);
+      }
+
+      setRateMaster(data);
+    };
+
     fetchMachine();
     fetchShop();
+    fetchRate();
   }, []);
 
-  return { machineMaster, machineNames, shopMaster, shopNames };
+  return { machineMaster, machineNames, shopMaster, shopNames, rateMaster };
 };

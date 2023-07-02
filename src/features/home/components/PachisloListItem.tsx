@@ -78,6 +78,7 @@ export const PachisloListItem = ({ data, date, onDataChange }: Props) => {
           <div className={clsx("flex", "flex-col")}>
             <p>{data.pachislo_payments?.shop.name}</p>
             <p>{data.pachislo_payments?.machine.name}</p>
+            <p>{data.pachislo_payments?.rate.name}</p>
           </div>
 
           <div className={clsx("flex", "flex-col")}>

@@ -32,6 +32,12 @@ export interface PaymentsResponse {
       id: number;
       name: string;
     };
+    rate: {
+      created_at: string | null;
+      id: number;
+      name: string;
+      is_pachinko: boolean;
+    };
   } | null;
   id: number;
   memo: string | null;
