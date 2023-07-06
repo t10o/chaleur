@@ -27,6 +27,7 @@ export const useHome = (userId: number) => {
 
     fetch();
     // 入力後の値をカレンダーに反映したいから isOpen を監視してる
+    // TODO: loginUserが取得できるまでLoadingにするのでuserIdは今後消す
   }, [targetMonth, isOpen, userId]);
 
   useEffect(() => {

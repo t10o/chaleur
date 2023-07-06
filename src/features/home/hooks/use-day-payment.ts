@@ -23,6 +23,7 @@ export const useDayPayment = (date: Date, userId: number) => {
 
     fetch();
     // TODO: 入力後の値をカレンダーに反映したいから isOpen を監視してるけど多分そうじゃない
+    // TODO: loginUserが取得できるまでLoadingにするのでuserIdは今後消す
   }, [isOpen, userId]);
 
   // TODO: データの編集・削除がされた時に再フェッチする。この実装なんかダサくないか
@@ -41,6 +42,7 @@ export const useDayPayment = (date: Date, userId: number) => {
 
     fetch();
     setIsRefetch(false);
+    // TODO: loginUserが取得できるまでLoadingにするのでuserIdは今後消す
   }, [isRefetch, userId]);
 
   return {

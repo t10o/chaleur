@@ -164,7 +164,13 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
             options={shopMaster!.map((shopMaster) => shopMaster.name)}
             {...field}
             renderInput={(params: any) => (
-              <TextField className={clsx("w-full")} {...params} />
+              <TextField
+                className={clsx("w-full")}
+                {...params}
+                onChange={(event) => {
+                  setValue("machine", event.target.value);
+                }}
+              />
             )}
             onChange={(event, value) => {
               setValue("shop", value!);
