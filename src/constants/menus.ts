@@ -4,6 +4,10 @@ export const MENUS = [
     href: "/",
   },
   {
+    name: "Timeline",
+    href: "/timeline",
+  },
+  {
     name: "Ranking",
     href: "/ranking",
   },

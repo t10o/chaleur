@@ -38,6 +38,27 @@ export const fetchDayPayment = async (date: Date, userId: number) => {
   return { data, error };
 };
 
+export const fetchTimelinePayment = async (date: Date) => {
+  const lastDate = new Date(date);
+  lastDate.setMonth(date.getMonth() + 1);
+  lastDate.setDate(0);
+
+  const firstDate = new Date(date);
+  firstDate.setMonth(date.getMonth() - 2);
+  firstDate.setDate(1);
+
+  const { data, error } = await supabase
+    .from("payments")
+    .select(
+      "*, pachislo_payments(*, machine(*), shop(*), rate(*)), horserace_payments(*, race(*), racecourse(*)), general_users(*)"
+    )
+    .lte("date", lastDate.toDateString())
+    .gte("date", firstDate.toDateString())
+    .order("date", { ascending: false });
+
+  return { data, error };
+};
+
 export const insertPaymentForPachoslo = async (
   value: PachisloFormValue,
   pachisloPaymentId: number,

@@ -7,7 +7,11 @@ export const PrimaryButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className = "", ...props }, ref) => {
     return (
       <Button
-        className={clsx("bg-primary", "text-white", className)}
+        className={clsx(
+          "text-white",
+          className,
+          props.disabled ? "bg-gray-400" : "bg-primary"
+        )}
         {...props}
         ref={ref}
       />
