@@ -218,6 +218,12 @@ export interface Database {
             columns: ["pachioslo_payment_id"]
             referencedRelation: "pachislo_payments"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "general_users"
+            referencedColumns: ["id"]
           }
         ]
       }
