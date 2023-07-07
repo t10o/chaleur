@@ -6,12 +6,30 @@ import MuiTimelineItem, { timelineItemClasses } from "@mui/lab/TimelineItem";
 import MuiTimelineSeparator from "@mui/lab/TimelineSeparator";
 import clsx from "clsx";
 
-import { PrimaryButton } from "@/components/elements";
+import { Modal, PrimaryButton } from "@/components/elements";
 import { TimelineItem } from "@/features/timeline/components/TimelineItem";
+import { TimelineItemDetail } from "@/features/timeline/components/TimelineItemDetail";
 import { useTimeline } from "@/features/timeline/hooks/use-timeline";
 
 export const Timeline = () => {
-  const { timelineData, noMoreData, setLoad } = useTimeline();
+  const {
+    timelineData,
+    noMoreData,
+    setLoad,
+    isOpen,
+    setIsOpen,
+    timelineDetailData,
+    setTimelineDetailData,
+  } = useTimeline();
+
+  const handleClick = (data: any) => {
+    setTimelineDetailData(data);
+    setIsOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -41,7 +59,13 @@ export const Timeline = () => {
 
                 <div className={clsx("mt-6")}>
                   {timelineData[key].map((data: any) => {
-                    return <TimelineItem key={data.id} data={data} />;
+                    return (
+                      <TimelineItem
+                        key={data.id}
+                        data={data}
+                        onClick={handleClick}
+                      />
+                    );
                   })}
                 </div>
               </MuiTimelineItem>
@@ -55,6 +79,21 @@ export const Timeline = () => {
         disabled={noMoreData}
         onClick={() => setLoad(true)}
       />
+
+      <Modal
+        isOpen={isOpen}
+        onRequestClose={handleModalClose}
+        style={{
+          content: {
+            height: "fit-content",
+          },
+        }}
+      >
+        <TimelineItemDetail
+          data={timelineDetailData}
+          onClose={handleModalClose}
+        />
+      </Modal>
     </>
   );
 };
