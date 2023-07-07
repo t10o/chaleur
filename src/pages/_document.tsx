@@ -4,6 +4,8 @@ const Document = () => {
   return (
     <Html lang="ja">
       <Head>
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/icon.png"></link>
         <link
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400&display=swap"
           rel="stylesheet"
