@@ -168,7 +168,7 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
                 className={clsx("w-full")}
                 {...params}
                 onChange={(event) => {
-                  setValue("machine", event.target.value);
+                  setValue("shop", event.target.value);
                 }}
               />
             )}
