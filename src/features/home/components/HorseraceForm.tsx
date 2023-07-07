@@ -36,6 +36,7 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
       (v) => Number(v),
       z.number().min(0, { message: "回収を入力してください" }),
     ),
+    memo: z.string().optional(),
   });
 
   const {
