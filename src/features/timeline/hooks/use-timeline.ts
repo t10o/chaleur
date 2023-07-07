@@ -7,11 +7,13 @@ import { PaymentsResponse } from "@/models/payments";
 export const useTimeline = () => {
   const [targetMonth, setTargetMonth] = useState<Date>(new Date());
   const [monthPayments, setMonthPayments] = useState<PaymentsResponse[] | null>(
-    []
+    [],
   );
   const [timelineData, setTimelineData] = useState<any>();
   const [noMoreData, setNoMoreData] = useState(false);
   const [load, setLoad] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [timelineDetailData, setTimelineDetailData] = useState<any>();
 
   useEffect(() => {
     const fetch = async () => {
@@ -48,12 +50,20 @@ export const useTimeline = () => {
       new Date(
         targetMonth.getFullYear(),
         targetMonth.getMonth() - 3,
-        targetMonth.getDate()
-      )
+        targetMonth.getDate(),
+      ),
     );
 
     setLoad(false);
   }, [load]);
 
-  return { timelineData, noMoreData, setLoad };
+  return {
+    timelineData,
+    noMoreData,
+    setLoad,
+    isOpen,
+    setIsOpen,
+    timelineDetailData,
+    setTimelineDetailData,
+  };
 };

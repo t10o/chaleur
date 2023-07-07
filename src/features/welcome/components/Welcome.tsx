@@ -27,6 +27,7 @@ export const Welcome = ({ user }: Props) => {
     handleSubmit,
     register,
     control,
+    setValue,
   } = useForm<WelcomeForm>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -72,7 +73,14 @@ export const Welcome = ({ user }: Props) => {
             control={control}
             render={({ field }) => {
               return (
-                <ToggleButtonGroup {...field} exclusive color="primary">
+                <ToggleButtonGroup
+                  {...field}
+                  exclusive
+                  color="primary"
+                  onChange={(event, value) => {
+                    setValue("like", value);
+                  }}
+                >
                   <ToggleButton value="pachislo">パチスロ</ToggleButton>
 
                   <ToggleButton value="horserace">競馬</ToggleButton>

@@ -42,11 +42,11 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
     kind: z.string(),
     pay: z.preprocess(
       (v) => Number(v),
-      z.number().min(0, { message: "投資を入力してください" })
+      z.number().min(0, { message: "投資を入力してください" }),
     ),
     payback: z.preprocess(
       (v) => Number(v),
-      z.number().min(0, { message: "回収を入力してください" })
+      z.number().min(0, { message: "回収を入力してください" }),
     ),
     memo: z.string().optional(),
     rate: z.string().min(1, { message: "レートを選んでください" }),
@@ -97,13 +97,13 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
   };
 
   const onSubmit: SubmitHandler<PachisloFormValue> = async (
-    formData: PachisloFormValue
+    formData: PachisloFormValue,
   ) => {
     try {
       if (!machineNames!.includes(formData.machine)) {
         const error = await insertMachineMaster(
           formData.machine,
-          formData.kind
+          formData.kind,
         );
 
         if (error) {
@@ -125,7 +125,7 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
 
       if (pachisloError)
         throw new Error(
-          `パチスロ収支の保存に失敗しました：${pachisloError.message}`
+          `パチスロ収支の保存に失敗しました：${pachisloError.message}`,
         );
 
       const { error } = data
@@ -134,13 +134,13 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
             formData,
             pachisloData![0].id,
             date,
-            auth.id
+            auth.id,
           )
         : await insertPaymentForPachoslo(
             formData,
             pachisloData![0].id,
             date,
-            auth.id
+            auth.id,
           );
 
       if (error) throw new Error(`収支の保存に失敗しました：${error.message}`);
@@ -197,7 +197,7 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
             className={clsx(!errors.shop && "mb-4", "rounded-lg")}
             freeSolo
             options={filteredMachineMaster()!.map(
-              (machineMaster) => machineMaster.name
+              (machineMaster) => machineMaster.name,
             )}
             {...field}
             renderInput={(params: any) => (
@@ -241,7 +241,14 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
           control={control}
           render={({ field }) => {
             return (
-              <ToggleButtonGroup {...field} exclusive color="primary">
+              <ToggleButtonGroup
+                {...field}
+                exclusive
+                color="primary"
+                onChange={(event, value) => {
+                  setValue("kind", value);
+                }}
+              >
                 <ToggleButton value="pachinko">パチンコ</ToggleButton>
 
                 <ToggleButton value="slot">スロット</ToggleButton>
@@ -271,6 +278,9 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
               id="rate"
               label="レート"
               {...field}
+              onChange={(event) => {
+                setValue("rate", event.target.value);
+              }}
             >
               {rateMaster &&
                 filteredRateMaster().map((rate) => {

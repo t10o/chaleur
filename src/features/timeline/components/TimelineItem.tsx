@@ -3,9 +3,10 @@ import clsx from "clsx";
 
 interface Props {
   data: any;
+  onClick: (data: any) => void;
 }
 
-export const TimelineItem = ({ data }: Props) => {
+export const TimelineItem = ({ data, onClick }: Props) => {
   const payment = data.payback - data.pay;
   const isWin = payment >= 0;
 
@@ -18,7 +19,10 @@ export const TimelineItem = ({ data }: Props) => {
   };
 
   return (
-    <TimelineContent className={clsx("flex", "flex-col")}>
+    <TimelineContent
+      className={clsx("flex", "flex-col")}
+      onClick={() => onClick(data)}
+    >
       <div className={clsx("mb-2", "font-bold")}>
         {data.general_users.nickname}
       </div>

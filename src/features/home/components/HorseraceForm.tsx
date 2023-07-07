@@ -30,12 +30,13 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
     race: z.string().min(1, { message: "レースを入力してください" }),
     pay: z.preprocess(
       (v) => Number(v),
-      z.number().min(0, { message: "投資を入力してください" })
+      z.number().min(0, { message: "投資を入力してください" }),
     ),
     payback: z.preprocess(
       (v) => Number(v),
-      z.number().min(0, { message: "回収を入力してください" })
+      z.number().min(0, { message: "回収を入力してください" }),
     ),
+    memo: z.string().optional(),
   });
 
   const {
@@ -43,6 +44,7 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
     handleSubmit,
     register,
     control,
+    setValue,
   } = useForm<HorseraceFormValue>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -59,7 +61,7 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
   const auth = useRecoilValue<AuthState>(authState);
 
   const onSubmit: SubmitHandler<HorseraceFormValue> = async (
-    formData: HorseraceFormValue
+    formData: HorseraceFormValue,
   ) => {
     try {
       const { data: horseraceData, error: horseraceError } = data
@@ -68,7 +70,7 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
 
       if (horseraceError)
         throw new Error(
-          `競馬収支の保存に失敗しました：${horseraceError.message}`
+          `競馬収支の保存に失敗しました：${horseraceError.message}`,
         );
 
       const { error } = data
@@ -77,13 +79,13 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
             formData,
             horseraceData![0].id,
             date,
-            auth.id
+            auth.id,
           )
         : await insertPaymentForHorserace(
             formData,
             horseraceData![0].id,
             date,
-            auth.id
+            auth.id,
           );
 
       if (error) throw new Error(`収支の保存に失敗しました：${error.message}`);
@@ -109,6 +111,9 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
               id="racecourse"
               label="会場"
               {...field}
+              onChange={(event) => {
+                setValue("racecourse", event.target.value);
+              }}
             >
               {racecourseMaster &&
                 racecourseMaster.map((racecourse) => {
@@ -140,6 +145,9 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
               id="race"
               label="会場"
               {...field}
+              onChange={(event) => {
+                setValue("race", event.target.value);
+              }}
             >
               {raceMaster &&
                 raceMaster.map((race) => {
