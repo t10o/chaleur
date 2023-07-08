@@ -10,6 +10,7 @@ export const useHorseraceForm = () => {
   const [racecourseMaster, setRacecourseMaster] = useState<
     RacecourseResponse[] | null
   >(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchRace = async () => {
@@ -39,5 +40,7 @@ export const useHorseraceForm = () => {
   return {
     raceMaster,
     racecourseMaster,
+    isLoading,
+    setIsLoading,
   };
 };

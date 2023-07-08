@@ -10,12 +10,13 @@ import { ShopResponse } from "@/models/shop";
 
 export const usePachisloForm = () => {
   const [machineMaster, setMachineMaster] = useState<MachineResponse[] | null>(
-    null
+    null,
   );
   const [machineNames, setMachineNames] = useState<string[] | null>(null);
   const [shopMaster, setShopMaster] = useState<ShopResponse[] | null>(null);
   const [shopNames, setShopNames] = useState<string[] | null>(null);
   const [rateMaster, setRateMaster] = useState<RateResponse[] | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchMachine = async () => {
@@ -59,5 +60,13 @@ export const usePachisloForm = () => {
     fetchRate();
   }, []);
 
-  return { machineMaster, machineNames, shopMaster, shopNames, rateMaster };
+  return {
+    machineMaster,
+    machineNames,
+    shopMaster,
+    shopNames,
+    rateMaster,
+    isLoading,
+    setIsLoading,
+  };
 };

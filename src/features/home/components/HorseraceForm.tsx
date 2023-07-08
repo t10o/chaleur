@@ -12,7 +12,7 @@ import {
   insertPaymentForHorserace,
   updatePaymentForHorserace,
 } from "@/apis/payments";
-import { Button, Input, Textarea } from "@/components/elements";
+import { Input, PrimaryButton, Textarea } from "@/components/elements";
 import { useHorseraceForm } from "@/features/home/hooks/use-horserace-form";
 import { HorseraceFormValue } from "@/models/horserace";
 import { PaymentsResponse } from "@/models/payments";
@@ -56,22 +56,28 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
     },
   });
 
-  const { raceMaster, racecourseMaster } = useHorseraceForm();
+  const { raceMaster, racecourseMaster, isLoading, setIsLoading } =
+    useHorseraceForm();
 
   const auth = useRecoilValue<AuthState>(authState);
 
   const onSubmit: SubmitHandler<HorseraceFormValue> = async (
     formData: HorseraceFormValue,
   ) => {
+    setIsLoading(true);
+
     try {
       const { data: horseraceData, error: horseraceError } = data
         ? await updateHorserace(data.horserace_payment_id!, formData)
         : await insertHorserace(formData);
 
-      if (horseraceError)
+      if (horseraceError) {
+        setIsLoading(false);
+
         throw new Error(
           `競馬収支の保存に失敗しました：${horseraceError.message}`,
         );
+      }
 
       const { error } = data
         ? await updatePaymentForHorserace(
@@ -88,10 +94,15 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
             auth.id,
           );
 
-      if (error) throw new Error(`収支の保存に失敗しました：${error.message}`);
+      if (error) {
+        setIsLoading(false);
+
+        throw new Error(`収支の保存に失敗しました：${error.message}`);
+      }
 
       onUpdated();
       toast.success("保存しました");
+      setIsLoading(false);
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -198,10 +209,12 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
         {...register("memo", { required: true })}
       />
 
-      <Button
-        className={clsx("w-full", "bg-primary", "text-white")}
+      <PrimaryButton
+        className={clsx("w-full")}
         type="submit"
         label="登録"
+        loading={isLoading}
+        loadingLabel="登録中..."
       />
     </form>
   );
