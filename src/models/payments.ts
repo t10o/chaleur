@@ -46,3 +46,10 @@ export interface PaymentsResponse {
   update_at: string | null;
   user_id: number;
 }
+
+export interface RankingPaymentResponse {
+  pay: number;
+  payback: number;
+  user_id: number;
+  general_users: { nickname: string } | null;
+}
