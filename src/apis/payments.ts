@@ -17,7 +17,7 @@ export const fetchMonthPayments = async (date: Date, userId: number) => {
   const { data, error } = await supabase
     .from("payments")
     .select(
-      "*, pachislo_payments(*, machine(*), shop(*), rate(*)), horserace_payments(*, race(*), racecourse(*))"
+      "*, pachislo_payments(*, machine(*), shop(*), rate(*)), horserace_payments(*, race(*), racecourse(*))",
     )
     .eq("user_id", userId)
     .lte("date", lastDate.toDateString())
@@ -30,7 +30,7 @@ export const fetchDayPayment = async (date: Date, userId: number) => {
   const { data, error } = await supabase
     .from("payments")
     .select(
-      "*, pachislo_payments(*, machine(*), shop(*), rate(*)), horserace_payments(*, race(*), racecourse(*))"
+      "*, pachislo_payments(*, machine(*), shop(*), rate(*)), horserace_payments(*, race(*), racecourse(*))",
     )
     .eq("date", date.toDateString())
     .eq("user_id", userId);
@@ -50,7 +50,7 @@ export const fetchTimelinePayment = async (date: Date) => {
   const { data, error } = await supabase
     .from("payments")
     .select(
-      "*, pachislo_payments(*, machine(*), shop(*), rate(*)), horserace_payments(*, race(*), racecourse(*)), general_users(*)"
+      "*, pachislo_payments(*, machine(*), shop(*), rate(*)), horserace_payments(*, race(*), racecourse(*)), general_users(*)",
     )
     .lte("date", lastDate.toDateString())
     .gte("date", firstDate.toDateString())
@@ -59,11 +59,47 @@ export const fetchTimelinePayment = async (date: Date) => {
   return { data, error };
 };
 
+export const fetchMonthlyRankingPayments = async (date: Date) => {
+  const lastDate = new Date(date);
+  lastDate.setMonth(date.getMonth() + 1);
+  lastDate.setDate(0);
+
+  const firstDate = new Date(date);
+  firstDate.setMonth(date.getMonth() - 2);
+  firstDate.setDate(1);
+
+  const { data, error } = await supabase
+    .from("payments")
+    .select("pay, payback, user_id, general_users(nickname)")
+    .lte("date", lastDate.toDateString())
+    .gte("date", firstDate.toDateString());
+
+  return { data, error };
+};
+
+export const fetchYearlyRankingPayments = async (date: Date) => {
+  const lastDate = new Date(date);
+  lastDate.setMonth(11);
+  lastDate.setDate(31);
+
+  const firstDate = new Date(date);
+  firstDate.setMonth(0);
+  firstDate.setDate(1);
+
+  const { data, error } = await supabase
+    .from("payments")
+    .select("pay, payback, user_id, general_users(nickname)")
+    .lte("date", lastDate.toDateString())
+    .gte("date", firstDate.toDateString());
+
+  return { data, error };
+};
+
 export const insertPaymentForPachoslo = async (
   value: PachisloFormValue,
   pachisloPaymentId: number,
   date: Date,
-  userId: number
+  userId: number,
 ) => {
   const { error } = await supabase.from("payments").insert({
     date: date.toDateString(),
@@ -82,7 +118,7 @@ export const updatePaymentForPachoslo = async (
   value: PachisloFormValue,
   pachisloPaymentId: number,
   date: Date,
-  userId: number
+  userId: number,
 ) => {
   const { error } = await supabase
     .from("payments")
@@ -103,7 +139,7 @@ export const insertPaymentForHorserace = async (
   value: HorseraceFormValue,
   horseracePaymentId: number,
   date: Date,
-  userId: number
+  userId: number,
 ) => {
   const { error } = await supabase.from("payments").insert({
     date: date.toDateString(),
@@ -122,7 +158,7 @@ export const updatePaymentForHorserace = async (
   value: HorseraceFormValue,
   horseracePaymentId: number,
   date: Date,
-  userId: number
+  userId: number,
 ) => {
   const { error } = await supabase
     .from("payments")

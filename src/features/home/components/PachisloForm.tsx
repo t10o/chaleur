@@ -22,7 +22,7 @@ import {
   updatePaymentForPachoslo,
 } from "@/apis/payments";
 import { insertShopMaster } from "@/apis/shop";
-import { Button, Textarea } from "@/components/elements";
+import { PrimaryButton, Textarea } from "@/components/elements";
 import { Input } from "@/components/elements/Input";
 import { usePachisloForm } from "@/features/home/hooks/use-pachislo-form";
 import { PachisloFormValue } from "@/models/pachislo";
@@ -73,8 +73,15 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
     },
   });
 
-  const { machineMaster, machineNames, shopMaster, shopNames, rateMaster } =
-    usePachisloForm();
+  const {
+    machineMaster,
+    machineNames,
+    shopMaster,
+    shopNames,
+    rateMaster,
+    isLoading,
+    setIsLoading,
+  } = usePachisloForm();
 
   const auth = useRecoilValue<AuthState>(authState);
 
@@ -99,6 +106,8 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
   const onSubmit: SubmitHandler<PachisloFormValue> = async (
     formData: PachisloFormValue,
   ) => {
+    setIsLoading(true);
+
     try {
       if (!machineNames!.includes(formData.machine)) {
         const error = await insertMachineMaster(
@@ -107,6 +116,8 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
         );
 
         if (error) {
+          setIsLoading(false);
+
           throw new Error(`台マスタの保存に失敗しました：${error.message}`);
         }
       }
@@ -115,6 +126,8 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
         const error = await insertShopMaster(formData.shop);
 
         if (error) {
+          setIsLoading(false);
+
           throw new Error(`店マスタの保存に失敗しました：${error.message}`);
         }
       }
@@ -123,10 +136,13 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
         ? await updatePachislo(data.pachioslo_payment_id!, formData)
         : await insertPachoslo(formData);
 
-      if (pachisloError)
+      if (pachisloError) {
+        setIsLoading(false);
+
         throw new Error(
           `パチスロ収支の保存に失敗しました：${pachisloError.message}`,
         );
+      }
 
       const { error } = data
         ? await updatePaymentForPachoslo(
@@ -143,10 +159,15 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
             auth.id,
           );
 
-      if (error) throw new Error(`収支の保存に失敗しました：${error.message}`);
+      if (error) {
+        setIsLoading(false);
+
+        throw new Error(`収支の保存に失敗しました：${error.message}`);
+      }
 
       onUpdated();
       toast.success("保存しました");
+      setIsLoading(false);
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -333,10 +354,12 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
         {...register("memo", { required: true })}
       />
 
-      <Button
-        className={clsx("w-full", "bg-primary", "text-white")}
+      <PrimaryButton
+        className={clsx("w-full")}
         type="submit"
         label="登録"
+        loading={isLoading}
+        loadingLabel="登録中..."
       />
     </form>
   );
