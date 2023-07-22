@@ -22,8 +22,7 @@ import {
   updatePaymentForPachoslo,
 } from "@/apis/payments";
 import { insertShopMaster } from "@/apis/shop";
-import { Textarea } from "@/components/elements";
-import { PremierButton } from "@/components/elements/Button/PremierButton";
+import { PremierButton, Textarea } from "@/components/elements";
 import { Input } from "@/components/elements/Input";
 import { usePachisloForm } from "@/features/home/hooks/use-pachislo-form";
 import { PachisloFormValue } from "@/models/pachislo";

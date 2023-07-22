@@ -9,6 +9,10 @@ interface Props extends ButtonProps {
   isWin: boolean;
 }
 
+// 1/40 緑
+// 1/111.1 紫
+// 1/229 赤
+// 1/319 虹
 export const PremierButton = React.forwardRef<HTMLButtonElement, Props>(
   ({ className = "", ...props }, ref) => {
     const color = () => {
@@ -52,8 +56,3 @@ export const PremierButton = React.forwardRef<HTMLButtonElement, Props>(
 );
 
 PremierButton.displayName = "PremierButton";
-
-// 1/40 緑
-// 1/111.1 紫
-// 1/229 赤
-// 1/319 虹

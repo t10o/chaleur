@@ -12,8 +12,7 @@ import {
   insertPaymentForHorserace,
   updatePaymentForHorserace,
 } from "@/apis/payments";
-import { Input, Textarea } from "@/components/elements";
-import { PremierButton } from "@/components/elements/Button/PremierButton";
+import { Input, PremierButton, Textarea } from "@/components/elements";
 import { useHorseraceForm } from "@/features/home/hooks/use-horserace-form";
 import { HorseraceFormValue } from "@/models/horserace";
 import { PaymentsResponse } from "@/models/payments";
