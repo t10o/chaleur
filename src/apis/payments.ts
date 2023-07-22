@@ -54,7 +54,8 @@ export const fetchTimelinePayment = async (date: Date) => {
     )
     .lte("date", lastDate.toDateString())
     .gte("date", firstDate.toDateString())
-    .order("date", { ascending: false });
+    .order("date", { ascending: false })
+    .order("created_at", { ascending: false });
 
   return { data, error };
 };

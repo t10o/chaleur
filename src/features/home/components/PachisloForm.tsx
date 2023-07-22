@@ -22,7 +22,7 @@ import {
   updatePaymentForPachoslo,
 } from "@/apis/payments";
 import { insertShopMaster } from "@/apis/shop";
-import { PrimaryButton, Textarea } from "@/components/elements";
+import { PremierButton, Textarea } from "@/components/elements";
 import { Input } from "@/components/elements/Input";
 import { usePachisloForm } from "@/features/home/hooks/use-pachislo-form";
 import { PachisloFormValue } from "@/models/pachislo";
@@ -86,6 +86,10 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
   const auth = useRecoilValue<AuthState>(authState);
 
   const watchKind = watch("kind");
+  const watchPay = watch("pay");
+  const watchPayback = watch("payback");
+
+  const isWin = Number(watchPayback) - Number(watchPay) > 0;
 
   const isPachinko = () => {
     return watchKind === "pachinko";
@@ -354,8 +358,9 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
         {...register("memo", { required: true })}
       />
 
-      <PrimaryButton
+      <PremierButton
         className={clsx("w-full")}
+        isWin={isWin}
         type="submit"
         label="登録"
         loading={isLoading}

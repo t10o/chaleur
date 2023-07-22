@@ -12,7 +12,7 @@ import {
   insertPaymentForHorserace,
   updatePaymentForHorserace,
 } from "@/apis/payments";
-import { Input, PrimaryButton, Textarea } from "@/components/elements";
+import { Input, PremierButton, Textarea } from "@/components/elements";
 import { useHorseraceForm } from "@/features/home/hooks/use-horserace-form";
 import { HorseraceFormValue } from "@/models/horserace";
 import { PaymentsResponse } from "@/models/payments";
@@ -45,6 +45,7 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
     register,
     control,
     setValue,
+    watch,
   } = useForm<HorseraceFormValue>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -60,6 +61,11 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
     useHorseraceForm();
 
   const auth = useRecoilValue<AuthState>(authState);
+
+  const watchPay = watch("pay");
+  const watchPayback = watch("payback");
+
+  const isWin = Number(watchPayback) - Number(watchPay) > 0;
 
   const onSubmit: SubmitHandler<HorseraceFormValue> = async (
     formData: HorseraceFormValue,
@@ -209,8 +215,9 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
         {...register("memo", { required: true })}
       />
 
-      <PrimaryButton
+      <PremierButton
         className={clsx("w-full")}
+        isWin={isWin}
         type="submit"
         label="登録"
         loading={isLoading}
