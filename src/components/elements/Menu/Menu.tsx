@@ -64,7 +64,7 @@ export const Menu = ({ onClick, ...props }: MenuProps) => {
         </li>
       </ul>
 
-      <div className={clsx("absolute", "bottom-0", "right-0", "mb-2", "mr-2")}>
+      <div className={clsx("absolute", "bottom-0", "right-0", "mb-4", "mr-4")}>
         version {version}
       </div>
     </SlideMenu>
