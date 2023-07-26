@@ -6,3 +6,11 @@ const withPWA = require("next-pwa")({
 module.exports = withPWA({
   reactStrictMode: true,
 });
+
+const { version } = require("./package.json");
+
+module.exports = {
+  publicRuntimeConfig: {
+    version,
+  },
+};

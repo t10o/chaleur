@@ -2,6 +2,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import clsx from "clsx";
+import getConfig from "next/config";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -20,6 +21,9 @@ export const Menu = ({ onClick, ...props }: MenuProps) => {
   const supabase = createPagesBrowserClient<Database>();
 
   const router = useRouter();
+
+  const { publicRuntimeConfig } = getConfig();
+  const version = publicRuntimeConfig?.version;
 
   const handleClick = async () => {
     await supabase.auth.signOut();
@@ -59,6 +63,10 @@ export const Menu = ({ onClick, ...props }: MenuProps) => {
           />
         </li>
       </ul>
+
+      <div className={clsx("absolute", "bottom-0", "right-0", "mb-2", "mr-2")}>
+        version {version}
+      </div>
     </SlideMenu>
   );
 };
