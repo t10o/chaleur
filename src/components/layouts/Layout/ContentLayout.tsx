@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 
 interface Props {
   children: ReactNode;
-  pageTitle?: string;
+  pageTitle?: string | ReactNode;
 }
 
 export const ContentLayout = ({ children, pageTitle }: Props): JSX.Element => {

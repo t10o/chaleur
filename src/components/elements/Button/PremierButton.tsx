@@ -18,8 +18,6 @@ export const PremierButton = React.forwardRef<HTMLButtonElement, Props>(
     const color = () => {
       const isElection = lottery();
 
-      console.log(isElection);
-
       switch (isElection) {
         case "lose":
           return "bg-primary";

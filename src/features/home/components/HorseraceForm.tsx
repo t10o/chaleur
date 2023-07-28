@@ -211,7 +211,7 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
       <InputLabel id="memo">メモ</InputLabel>
       <Textarea
         id="memo"
-        className={clsx("w-full", "mb-4")}
+        className={clsx("w-full", "mb-4", "h-32")}
         {...register("memo", { required: true })}
       />
 
