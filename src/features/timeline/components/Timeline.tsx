@@ -5,30 +5,27 @@ import MuiTimelineDot from "@mui/lab/TimelineDot";
 import MuiTimelineItem, { timelineItemClasses } from "@mui/lab/TimelineItem";
 import MuiTimelineSeparator from "@mui/lab/TimelineSeparator";
 import clsx from "clsx";
+import { useRouter } from "next/router";
+import { useSetRecoilState } from "recoil";
 
-import { Modal, PrimaryButton } from "@/components/elements";
+import { PrimaryButton } from "@/components/elements";
 import { TimelineItem } from "@/features/timeline/components/TimelineItem";
-import { TimelineItemDetail } from "@/features/timeline/components/TimelineItemDetail";
 import { useTimeline } from "@/features/timeline/hooks/use-timeline";
+import {
+  TimelineState,
+  timelineState,
+} from "@/features/timeline/stores/timeline";
 
 export const Timeline = () => {
-  const {
-    timelineData,
-    noMoreData,
-    setLoad,
-    isOpen,
-    setIsOpen,
-    timelineDetailData,
-    setTimelineDetailData,
-  } = useTimeline();
+  const { timelineData, noMoreData, setLoad } = useTimeline();
 
-  const handleClick = (data: any) => {
-    setTimelineDetailData(data);
-    setIsOpen(true);
-  };
+  const router = useRouter();
 
-  const handleModalClose = () => {
-    setIsOpen(false);
+  const setTimelineDetail = useSetRecoilState<TimelineState>(timelineState);
+
+  const handleClick = async (data: any) => {
+    setTimelineDetail({ timelineDetail: data });
+    await router.push(`/timeline/${data.id}`);
   };
 
   return (
@@ -79,21 +76,6 @@ export const Timeline = () => {
         disabled={noMoreData}
         onClick={() => setLoad(true)}
       />
-
-      <Modal
-        isOpen={isOpen}
-        onRequestClose={handleModalClose}
-        style={{
-          content: {
-            height: "fit-content",
-          },
-        }}
-      >
-        <TimelineItemDetail
-          data={timelineDetailData}
-          onClose={handleModalClose}
-        />
-      </Modal>
     </>
   );
 };

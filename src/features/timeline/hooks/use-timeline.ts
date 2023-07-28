@@ -12,8 +12,6 @@ export const useTimeline = () => {
   const [timelineData, setTimelineData] = useState<any>();
   const [noMoreData, setNoMoreData] = useState(false);
   const [load, setLoad] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [timelineDetailData, setTimelineDetailData] = useState<any>();
 
   useEffect(() => {
     const fetch = async () => {
@@ -61,9 +59,5 @@ export const useTimeline = () => {
     timelineData,
     noMoreData,
     setLoad,
-    isOpen,
-    setIsOpen,
-    timelineDetailData,
-    setTimelineDetailData,
   };
 };
