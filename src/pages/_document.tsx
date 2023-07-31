@@ -77,7 +77,7 @@ const Document = () => {
           rel="apple-touch-startup-image"
         />
         <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/icon.png"></link>
+        <link rel="apple-touch-icon" href="/icon-512x512.png"></link>
         <link
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400&display=swap"
           rel="stylesheet"
