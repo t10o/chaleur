@@ -12,4 +12,5 @@ module.exports = {
       whitelist: [],
     },
   },
+  root: true,
 };

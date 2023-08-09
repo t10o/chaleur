@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 
 import { fetchRaceMaster } from "@/apis/race";
 import { fetchRacecourseMaster } from "@/apis/racecourse";
+import { RaceResponse } from "@/models/race";
 import { RacecourseResponse } from "@/models/racecourse";
 
 export const useHorseraceForm = () => {

@@ -9,10 +9,10 @@ import { Database } from "@/types/schema";
 const supabase = createPagesBrowserClient<Database>();
 
 export const insertPachoslo = async (value: PachisloFormValue) => {
-  const { machineMaster, shopMaster, rateMaster } = await fetchMasters();
+  const { machineMaster, shopMaster } = await fetchMasters();
 
   const targetMachine = machineMaster!.filter(
-    (machine) => machine.name === value.machine
+    (machine) => machine.name === value.machine,
   );
   const targetShop = shopMaster!.filter((shop) => shop.name === value.shop);
 
@@ -33,10 +33,10 @@ export const insertPachoslo = async (value: PachisloFormValue) => {
 };
 
 export const updatePachislo = async (id: number, value: PachisloFormValue) => {
-  const { machineMaster, shopMaster, rateMaster } = await fetchMasters();
+  const { machineMaster, shopMaster } = await fetchMasters();
 
   const targetMachine = machineMaster!.filter(
-    (machine) => machine.name === value.machine
+    (machine) => machine.name === value.machine,
   );
   const targetShop = shopMaster!.filter((shop) => shop.name === value.shop);
 
