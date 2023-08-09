@@ -66,7 +66,6 @@ export const fetchMonthlyRankingPayments = async (date: Date) => {
   lastDate.setDate(0);
 
   const firstDate = new Date(date);
-  firstDate.setMonth(date.getMonth() - 2);
   firstDate.setDate(1);
 
   const { data, error } = await supabase

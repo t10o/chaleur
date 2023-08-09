@@ -25,10 +25,11 @@ export const useRanking = () => {
   const [yearlyTopFiveUsers, setYearlyTopFiveUsers] = useState<
     Ranking[] | null
   >(null);
+  const [targetDate, setTargetDate] = useState<Date>(new Date());
 
   useEffect(() => {
     const fetchMonthly = async () => {
-      const { data, error } = await fetchMonthlyRankingPayments(new Date());
+      const { data, error } = await fetchMonthlyRankingPayments(targetDate);
 
       if (error) {
         throw new Error(`月間ランキングの取得に失敗しました：${error.message}`);
@@ -38,7 +39,7 @@ export const useRanking = () => {
     };
 
     const fetchYearly = async () => {
-      const { data, error } = await fetchYearlyRankingPayments(new Date());
+      const { data, error } = await fetchYearlyRankingPayments(targetDate);
 
       if (error) {
         throw new Error(`年間ランキングの取得に失敗しました：${error.message}`);
@@ -49,7 +50,7 @@ export const useRanking = () => {
 
     fetchMonthly();
     fetchYearly();
-  }, []);
+  }, [targetDate]);
 
   useEffect(() => {
     if (!monthlyPayments || !monthlyPayments.length) {
@@ -109,5 +110,5 @@ export const useRanking = () => {
     return allPayback;
   };
 
-  return { monthlyTopFiveUsers, yearlyTopFiveUsers };
+  return { monthlyTopFiveUsers, yearlyTopFiveUsers, targetDate, setTargetDate };
 };
