@@ -12,7 +12,7 @@ export const AccentButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
       />
     );
-  }
+  },
 );
 
 AccentButton.displayName = "AccentButton";
