@@ -38,13 +38,13 @@ export const PaymentRegisterForm = ({
     } else {
       setGamble(auth.like as "pachislo" | "horserace");
     }
-  }, []);
+  }, [auth.like, data]);
 
   const isPachislo = gamble === "pachislo";
 
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
-    value: "pachislo" | "horserace"
+    value: "pachislo" | "horserace",
   ) => {
     setGamble(value);
   };
@@ -58,7 +58,7 @@ export const PaymentRegisterForm = ({
           "items-center",
           "mb-8",
           "text-lg",
-          "font-bold"
+          "font-bold",
         )}
       >
         {formatJpYmd(date)}

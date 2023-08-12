@@ -9,7 +9,7 @@ import * as z from "zod";
 
 import { Input, PremierButton, Textarea } from "@/components/elements";
 import { useHorseraceForm } from "@/features/home/hooks/use-horserace-form";
-import { submitHorserace } from "@/features/home/repositories/horseraceForm";
+import { submitHorserace } from "@/features/home/repositories/horserace";
 import { HorseraceFormValue } from "@/models/horserace";
 import { PaymentsResponse } from "@/models/payments";
 import { AuthState, authState } from "@/stores/auth";

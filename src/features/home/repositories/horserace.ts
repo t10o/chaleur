@@ -1,5 +1,10 @@
-import { insertHorserace, updateHorserace } from "@/apis/horseracePayments";
 import {
+  deleteHorseracePayment,
+  insertHorseracePayment,
+  updateHorseracePayment,
+} from "@/apis/horseracePayments";
+import {
+  deletePayment,
   insertPaymentForHorserace,
   updatePaymentForHorserace,
 } from "@/apis/payments";
@@ -13,8 +18,8 @@ export const submitHorserace = async (
   data?: PaymentsResponse,
 ) => {
   const { data: horseraceData, error: horseraceError } = data
-    ? await updateHorserace(data.horserace_payment_id!, formData)
-    : await insertHorserace(formData);
+    ? await updateHorseracePayment(data.horserace_payment_id!, formData)
+    : await insertHorseracePayment(formData);
 
   if (horseraceError) {
     throw new Error(`競馬収支の保存に失敗しました：${horseraceError.message}`);
@@ -37,5 +42,21 @@ export const submitHorserace = async (
 
   if (error) {
     throw new Error(`収支の保存に失敗しました：${error.message}`);
+  }
+};
+
+export const deleteHorserace = async (data: PaymentsResponse) => {
+  const { error: paymentError } = await deletePayment(data.id);
+
+  if (paymentError) {
+    throw new Error(`収支の削除に失敗しました：${paymentError.message}`);
+  }
+
+  const { error: horseraceError } = await deleteHorseracePayment(
+    data.horserace_payment_id!,
+  );
+
+  if (horseraceError) {
+    throw new Error(`競馬収支の削除に失敗しました：${horseraceError.message}`);
   }
 };

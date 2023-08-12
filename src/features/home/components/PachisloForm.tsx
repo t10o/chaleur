@@ -18,7 +18,7 @@ import * as z from "zod";
 import { PremierButton, Textarea } from "@/components/elements";
 import { Input } from "@/components/elements/Input";
 import { usePachisloForm } from "@/features/home/hooks/use-pachislo-form";
-import { submitPachislo } from "@/features/home/repositories/pachisloForm";
+import { submitPachislo } from "@/features/home/repositories/pachislo";
 import { PachisloFormValue } from "@/models/pachislo";
 import { PaymentsResponse } from "@/models/payments";
 import { AuthState, authState } from "@/stores/auth";

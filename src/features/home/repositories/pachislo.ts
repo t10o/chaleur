@@ -1,6 +1,11 @@
 import { insertMachineMaster } from "@/apis/machine";
-import { insertPachislo, updatePachislo } from "@/apis/pachisloPayments";
 import {
+  deletePachisloPayment,
+  insertPachisloPayment,
+  updatePachisloPayment,
+} from "@/apis/pachisloPayments";
+import {
+  deletePayment,
   insertPaymentForPachoslo,
   updatePaymentForPachoslo,
 } from "@/apis/payments";
@@ -44,13 +49,17 @@ export const submitPachislo = async (
   const targetShop = shopMaster!.filter((shop) => shop.name === formData.shop);
 
   const { data: pachisloData, error: pachisloError } = data
-    ? await updatePachislo(
+    ? await updatePachisloPayment(
         data.pachislo_payment_id!,
         formData,
         targetMachine[0].id,
         targetShop[0].id,
       )
-    : await insertPachislo(formData, targetMachine[0].id, targetShop[0].id);
+    : await insertPachisloPayment(
+        formData,
+        targetMachine[0].id,
+        targetShop[0].id,
+      );
 
   if (pachisloError) {
     throw new Error(
@@ -76,4 +85,20 @@ export const submitPachislo = async (
   if (error) {
     throw new Error(`収支の保存に失敗しました：${error.message}`);
   }
+};
+
+export const deletePachislo = async (data: PaymentsResponse) => {
+  const { error: paymentError } = await deletePayment(data.id);
+
+  if (paymentError)
+    throw new Error(`収支の削除に失敗しました：${paymentError.message}`);
+
+  const { error: pachisloError } = await deletePachisloPayment(
+    data.pachislo_payment_id!,
+  );
+
+  if (pachisloError)
+    throw new Error(
+      `パチスロ収支の削除に失敗しました：${pachisloError.message}`,
+    );
 };

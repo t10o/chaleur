@@ -5,7 +5,7 @@ import { Database } from "@/types/schema";
 
 const supabase = createPagesBrowserClient<Database>();
 
-export const insertPachislo = async (
+export const insertPachisloPayment = async (
   value: PachisloFormValue,
   machineId: number,
   shopId: number,
@@ -23,7 +23,7 @@ export const insertPachislo = async (
   return { data, error };
 };
 
-export const updatePachislo = async (
+export const updatePachisloPayment = async (
   id: number,
   value: PachisloFormValue,
   machineId: number,
@@ -43,7 +43,7 @@ export const updatePachislo = async (
   return { data, error };
 };
 
-export const deletePachislo = async (id: number) => {
+export const deletePachisloPayment = async (id: number) => {
   const { error } = await supabase
     .from("pachislo_payments")
     .delete()

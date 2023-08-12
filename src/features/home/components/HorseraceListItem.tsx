@@ -2,8 +2,6 @@ import clsx from "clsx";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-import { deleteHorserace } from "@/apis/horseracePayments";
-import { deletePayment } from "@/apis/payments";
 import {
   AccentButton,
   Button,
@@ -12,6 +10,7 @@ import {
   PrimaryButton,
 } from "@/components/elements";
 import { PaymentRegisterForm } from "@/features/home/components/PaymentRegisterForm";
+import { deleteHorserace } from "@/features/home/repositories/horserace";
 import { PaymentsResponse } from "@/models/payments";
 
 interface Props {
@@ -47,21 +46,7 @@ export const HorseraceListItem = ({ data, date, onDataChange }: Props) => {
 
   const handleDelete = async () => {
     try {
-      const { error: paymentError } = await deletePayment(data.id);
-
-      if (paymentError) {
-        throw new Error(`収支の削除に失敗しました：${paymentError.message}`);
-      }
-
-      const { error: horseraceError } = await deleteHorserace(
-        data.horserace_payment_id!
-      );
-
-      if (horseraceError) {
-        throw new Error(
-          `競馬収支の削除に失敗しました：${horseraceError.message}`
-        );
-      }
+      await deleteHorserace(data);
 
       toast.success("削除しました");
       setIsDialogOpen(false);
@@ -89,7 +74,7 @@ export const HorseraceListItem = ({ data, date, onDataChange }: Props) => {
               className={clsx(
                 isWin(data.payback - data.pay)
                   ? "text-emerald-600"
-                  : "text-red-600"
+                  : "text-red-600",
               )}
             >
               収支: {data.payback - data.pay}
