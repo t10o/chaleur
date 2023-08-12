@@ -137,7 +137,7 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
       }
 
       const { data: pachisloData, error: pachisloError } = data
-        ? await updatePachislo(data.pachioslo_payment_id!, formData)
+        ? await updatePachislo(data.pachislo_payment_id!, formData)
         : await insertPachoslo(formData);
 
       if (pachisloError) {

@@ -106,7 +106,7 @@ export const insertPaymentForPachoslo = async (
     pay: Number(value.pay),
     payback: Number(value.payback),
     memo: value.memo,
-    pachioslo_payment_id: pachisloPaymentId,
+    pachislo_payment_id: pachisloPaymentId,
     user_id: userId,
   });
 
@@ -127,7 +127,7 @@ export const updatePaymentForPachoslo = async (
       pay: Number(value.pay),
       payback: Number(value.payback),
       memo: value.memo,
-      pachioslo_payment_id: pachisloPaymentId,
+      pachislo_payment_id: pachisloPaymentId,
       user_id: userId,
     })
     .eq("id", id);

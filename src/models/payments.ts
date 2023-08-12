@@ -16,7 +16,7 @@ export interface PaymentsResponse {
       name: string;
     };
   } | null;
-  pachioslo_payment_id: number | null;
+  pachislo_payment_id: number | null;
   pachislo_payments: {
     created_at: string | null;
     id: number;

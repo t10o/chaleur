@@ -11,7 +11,7 @@ export const TimelineItem = ({ data, onClick }: Props) => {
   const isWin = payment >= 0;
 
   const gambleData = () => {
-    if (data.pachioslo_payment_id) {
+    if (data.pachislo_payment_id) {
       return data.pachislo_payments.machine.name;
     } else {
       return `${data.horserace_payments.racecourse.name} ${data.horserace_payments.race.name}`;

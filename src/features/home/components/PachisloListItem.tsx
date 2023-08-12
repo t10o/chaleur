@@ -53,12 +53,12 @@ export const PachisloListItem = ({ data, date, onDataChange }: Props) => {
         throw new Error(`収支の削除に失敗しました：${paymentError.message}`);
 
       const { error: pachisloError } = await deletePachislo(
-        data.pachioslo_payment_id!
+        data.pachislo_payment_id!,
       );
 
       if (pachisloError)
         throw new Error(
-          `パチスロ収支の削除に失敗しました：${pachisloError.message}`
+          `パチスロ収支の削除に失敗しました：${pachisloError.message}`,
         );
 
       toast.success("削除しました");
@@ -88,7 +88,7 @@ export const PachisloListItem = ({ data, date, onDataChange }: Props) => {
               className={clsx(
                 isWin(data.payback - data.pay)
                   ? "text-emerald-600"
-                  : "text-red-600"
+                  : "text-red-600",
               )}
             >
               収支: {data.payback - data.pay}
