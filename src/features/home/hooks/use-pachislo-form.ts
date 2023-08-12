@@ -4,16 +4,14 @@ import { toast } from "react-toastify";
 import { fetchMachineMaster } from "@/apis/machine";
 import { fetchRateMaster } from "@/apis/rate";
 import { fetchShopMaster } from "@/apis/shop";
-import { MachineResponse } from "@/models/machine";
+import { Machine } from "@/models/machine";
 import { RateResponse } from "@/models/rate";
-import { ShopResponse } from "@/models/shop";
+import { Shop } from "@/models/shop";
 
 export const usePachisloForm = () => {
-  const [machineMaster, setMachineMaster] = useState<MachineResponse[] | null>(
-    null,
-  );
+  const [machineMaster, setMachineMaster] = useState<Machine[] | null>(null);
   const [machineNames, setMachineNames] = useState<string[] | null>(null);
-  const [shopMaster, setShopMaster] = useState<ShopResponse[] | null>(null);
+  const [shopMaster, setShopMaster] = useState<Shop[] | null>(null);
   const [shopNames, setShopNames] = useState<string[] | null>(null);
   const [rateMaster, setRateMaster] = useState<RateResponse[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);

@@ -30,8 +30,6 @@ export const lottery = (): "rainbow" | "red" | "purple" | "green" | "lose" => {
 
   const number = Math.floor(Math.random() * 3190);
 
-  console.log(number);
-
   if (RAINBOW_ELECTION_NUMBERS.includes(number)) return "rainbow";
   if (RED_ELECTION_NUMBERS.includes(number)) return "red";
   if (PURPLE_ELECTION_NUMBERS.includes(number)) return "purple";
