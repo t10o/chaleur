@@ -176,7 +176,7 @@ export interface Database {
           horserace_payment_id: number | null
           id: number
           memo: string | null
-          pachioslo_payment_id: number | null
+          pachislo_payment_id: number | null
           pay: number
           payback: number
           update_at: string | null
@@ -188,7 +188,7 @@ export interface Database {
           horserace_payment_id?: number | null
           id?: number
           memo?: string | null
-          pachioslo_payment_id?: number | null
+          pachislo_payment_id?: number | null
           pay: number
           payback: number
           update_at?: string | null
@@ -200,7 +200,7 @@ export interface Database {
           horserace_payment_id?: number | null
           id?: number
           memo?: string | null
-          pachioslo_payment_id?: number | null
+          pachislo_payment_id?: number | null
           pay?: number
           payback?: number
           update_at?: string | null
@@ -214,8 +214,8 @@ export interface Database {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "payments_pachioslo_payment_id_fkey"
-            columns: ["pachioslo_payment_id"]
+            foreignKeyName: "payments_pachislo_payment_id_fkey"
+            columns: ["pachislo_payment_id"]
             referencedRelation: "pachislo_payments"
             referencedColumns: ["id"]
           },

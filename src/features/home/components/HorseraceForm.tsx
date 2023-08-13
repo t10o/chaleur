@@ -7,13 +7,9 @@ import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import * as z from "zod";
 
-import { insertHorserace, updateHorserace } from "@/apis/horseracePayments";
-import {
-  insertPaymentForHorserace,
-  updatePaymentForHorserace,
-} from "@/apis/payments";
 import { Input, PremierButton, Textarea } from "@/components/elements";
 import { useHorseraceForm } from "@/features/home/hooks/use-horserace-form";
+import { submitHorserace } from "@/features/home/repositories/horserace";
 import { HorseraceFormValue } from "@/models/horserace";
 import { PaymentsResponse } from "@/models/payments";
 import { AuthState, authState } from "@/stores/auth";
@@ -73,43 +69,13 @@ export const HorseraceForm = ({ data = undefined, date, onUpdated }: Props) => {
     setIsLoading(true);
 
     try {
-      const { data: horseraceData, error: horseraceError } = data
-        ? await updateHorserace(data.horserace_payment_id!, formData)
-        : await insertHorserace(formData);
-
-      if (horseraceError) {
-        setIsLoading(false);
-
-        throw new Error(
-          `競馬収支の保存に失敗しました：${horseraceError.message}`,
-        );
-      }
-
-      const { error } = data
-        ? await updatePaymentForHorserace(
-            data.id,
-            formData,
-            horseraceData![0].id,
-            date,
-            auth.id,
-          )
-        : await insertPaymentForHorserace(
-            formData,
-            horseraceData![0].id,
-            date,
-            auth.id,
-          );
-
-      if (error) {
-        setIsLoading(false);
-
-        throw new Error(`収支の保存に失敗しました：${error.message}`);
-      }
+      await submitHorserace(formData, auth.id, date, data);
 
       onUpdated();
       toast.success("保存しました");
       setIsLoading(false);
     } catch (error: any) {
+      setIsLoading(false);
       toast.error(error.message);
     }
   };

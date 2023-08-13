@@ -15,16 +15,10 @@ import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import * as z from "zod";
 
-import { insertMachineMaster } from "@/apis/machine";
-import { insertPachoslo, updatePachislo } from "@/apis/pachisloPayments";
-import {
-  insertPaymentForPachoslo,
-  updatePaymentForPachoslo,
-} from "@/apis/payments";
-import { insertShopMaster } from "@/apis/shop";
 import { PremierButton, Textarea } from "@/components/elements";
 import { Input } from "@/components/elements/Input";
 import { usePachisloForm } from "@/features/home/hooks/use-pachislo-form";
+import { submitPachislo } from "@/features/home/repositories/pachislo";
 import { PachisloFormValue } from "@/models/pachislo";
 import { PaymentsResponse } from "@/models/payments";
 import { AuthState, authState } from "@/stores/auth";
@@ -113,66 +107,22 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
     setIsLoading(true);
 
     try {
-      if (!machineNames!.includes(formData.machine)) {
-        const error = await insertMachineMaster(
-          formData.machine,
-          formData.kind,
-        );
-
-        if (error) {
-          setIsLoading(false);
-
-          throw new Error(`台マスタの保存に失敗しました：${error.message}`);
-        }
-      }
-
-      if (!shopNames!.includes(formData.shop)) {
-        const error = await insertShopMaster(formData.shop);
-
-        if (error) {
-          setIsLoading(false);
-
-          throw new Error(`店マスタの保存に失敗しました：${error.message}`);
-        }
-      }
-
-      const { data: pachisloData, error: pachisloError } = data
-        ? await updatePachislo(data.pachioslo_payment_id!, formData)
-        : await insertPachoslo(formData);
-
-      if (pachisloError) {
-        setIsLoading(false);
-
-        throw new Error(
-          `パチスロ収支の保存に失敗しました：${pachisloError.message}`,
-        );
-      }
-
-      const { error } = data
-        ? await updatePaymentForPachoslo(
-            data.id,
-            formData,
-            pachisloData![0].id,
-            date,
-            auth.id,
-          )
-        : await insertPaymentForPachoslo(
-            formData,
-            pachisloData![0].id,
-            date,
-            auth.id,
-          );
-
-      if (error) {
-        setIsLoading(false);
-
-        throw new Error(`収支の保存に失敗しました：${error.message}`);
-      }
+      await submitPachislo(
+        formData,
+        machineNames,
+        machineMaster,
+        shopNames,
+        shopMaster,
+        auth.id,
+        date,
+        data,
+      );
 
       onUpdated();
       toast.success("保存しました");
       setIsLoading(false);
     } catch (error: any) {
+      setIsLoading(false);
       toast.error(error.message);
     }
   };

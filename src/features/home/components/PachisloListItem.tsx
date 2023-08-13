@@ -2,8 +2,6 @@ import clsx from "clsx";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-import { deletePachislo } from "@/apis/pachisloPayments";
-import { deletePayment } from "@/apis/payments";
 import {
   AccentButton,
   Button,
@@ -12,6 +10,7 @@ import {
   PrimaryButton,
 } from "@/components/elements";
 import { PaymentRegisterForm } from "@/features/home/components/PaymentRegisterForm";
+import { deletePachislo } from "@/features/home/repositories/pachislo";
 import { PaymentsResponse } from "@/models/payments";
 
 interface Props {
@@ -47,19 +46,7 @@ export const PachisloListItem = ({ data, date, onDataChange }: Props) => {
 
   const handleDelete = async () => {
     try {
-      const { error: paymentError } = await deletePayment(data.id);
-
-      if (paymentError)
-        throw new Error(`収支の削除に失敗しました：${paymentError.message}`);
-
-      const { error: pachisloError } = await deletePachislo(
-        data.pachioslo_payment_id!
-      );
-
-      if (pachisloError)
-        throw new Error(
-          `パチスロ収支の削除に失敗しました：${pachisloError.message}`
-        );
+      await deletePachislo(data);
 
       toast.success("削除しました");
       setIsDialogOpen(false);
@@ -88,7 +75,7 @@ export const PachisloListItem = ({ data, date, onDataChange }: Props) => {
               className={clsx(
                 isWin(data.payback - data.pay)
                   ? "text-emerald-600"
-                  : "text-red-600"
+                  : "text-red-600",
               )}
             >
               収支: {data.payback - data.pay}

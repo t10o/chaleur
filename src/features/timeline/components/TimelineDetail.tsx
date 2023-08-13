@@ -23,7 +23,7 @@ export const TimelineDetail = () => {
   };
 
   const gambleData = () => {
-    if (timelineDetail.pachioslo_payment_id) {
+    if (timelineDetail.pachislo_payment_id) {
       return (
         <>
           <TimelineDetailItem

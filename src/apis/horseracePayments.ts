@@ -5,7 +5,7 @@ import { Database } from "@/types/schema";
 
 const supabase = createPagesBrowserClient<Database>();
 
-export const insertHorserace = async (value: HorseraceFormValue) => {
+export const insertHorseracePayment = async (value: HorseraceFormValue) => {
   const { data, error } = await supabase
     .from("horserace_payments")
     .insert({
@@ -17,9 +17,9 @@ export const insertHorserace = async (value: HorseraceFormValue) => {
   return { data, error };
 };
 
-export const updateHorserace = async (
+export const updateHorseracePayment = async (
   id: number,
-  value: HorseraceFormValue
+  value: HorseraceFormValue,
 ) => {
   const { data, error } = await supabase
     .from("horserace_payments")
@@ -33,7 +33,7 @@ export const updateHorserace = async (
   return { data, error };
 };
 
-export const deleteHorserace = async (id: number) => {
+export const deleteHorseracePayment = async (id: number) => {
   const { error } = await supabase
     .from("horserace_payments")
     .delete()
