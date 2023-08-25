@@ -20,12 +20,8 @@ const fetchMachineMasterCount = async () => {
 
 export const insertMachineMaster = async (
   machineName: string,
-  kind: string
+  kind: string,
 ) => {
-  const isPachinko = (kind: string) => {
-    return kind === "pachinko";
-  };
-
   const count = await fetchMachineMasterCount();
 
   const { error } = await supabase
@@ -33,7 +29,7 @@ export const insertMachineMaster = async (
     .insert({
       id: count! + 1,
       name: machineName,
-      is_pachinko: isPachinko(kind),
+      kind: kind,
     })
     .select();
 
