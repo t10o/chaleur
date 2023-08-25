@@ -12,7 +12,9 @@ export const TimelineItem = ({ data, onClick }: Props) => {
 
   const gambleData = () => {
     if (data.pachislo_payment_id) {
-      return data.pachislo_payments.machine.name;
+      return data.pachislo_payments.machine.name === "-"
+        ? "乗り打ち"
+        : data.pachislo_payments.machine.name;
     } else {
       return `${data.horserace_payments.racecourse.name} ${data.horserace_payments.race.name}`;
     }
