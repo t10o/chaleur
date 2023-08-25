@@ -26,8 +26,15 @@ export const submitPachislo = async (
   data?: PaymentsResponse,
 ) => {
   // 台名がまだマスタにない場合、新しく登録する
+  let newMachine;
+  let newShop;
   if (machineNames && !machineNames.includes(formData.machine)) {
-    const error = await insertMachineMaster(formData.machine, formData.kind);
+    const { data, error } = await insertMachineMaster(
+      formData.machine,
+      formData.kind,
+    );
+
+    newMachine = data;
 
     if (error) {
       throw new Error(`台マスタの保存に失敗しました：${error.message}`);
@@ -36,24 +43,27 @@ export const submitPachislo = async (
 
   // 店名がまだマスタにない場合、新しく登録する
   if (shopNames && !shopNames.includes(formData.shop)) {
-    const error = await insertShopMaster(formData.shop);
+    const { data, error } = await insertShopMaster(formData.shop);
 
     if (error) {
       throw new Error(`店マスタの保存に失敗しました：${error.message}`);
     }
+
+    newShop = data;
   }
 
   const targetMachine = machineMaster!.filter(
     (machine) => machine.name === formData.machine,
   );
+
   const targetShop = shopMaster!.filter((shop) => shop.name === formData.shop);
 
   const { data: pachisloData, error: pachisloError } = data
     ? await updatePachisloPayment(
         data.pachislo_payment_id!,
         formData,
-        targetMachine[0].id,
-        targetShop[0].id,
+        targetMachine.length > 0 ? targetMachine[0].id : newMachine![0].id,
+        targetShop.length > 0 ? targetShop[0].id : newShop![0].id,
       )
     : await insertPachisloPayment(
         formData,

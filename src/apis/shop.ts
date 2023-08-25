@@ -10,21 +10,11 @@ export const fetchShopMaster = async () => {
   return { data, error };
 };
 
-const fetchShopMasterCount = async () => {
-  const { count } = await supabase
-    .from("shop")
-    .select("*", { count: "exact", head: true });
-
-  return count;
-};
-
 export const insertShopMaster = async (shopName: string) => {
-  const count = await fetchShopMasterCount();
-
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("shop")
-    .insert({ id: count! + 1, name: shopName })
+    .insert({ name: shopName })
     .select();
 
-  return error;
+  return { data, error };
 };
