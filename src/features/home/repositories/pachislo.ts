@@ -67,8 +67,8 @@ export const submitPachislo = async (
       )
     : await insertPachisloPayment(
         formData,
-        targetMachine[0].id,
-        targetShop[0].id,
+        targetMachine.length > 0 ? targetMachine[0].id : newMachine![0].id,
+        targetShop.length > 0 ? targetShop[0].id : newShop![0].id,
       );
 
   if (pachisloError) {
