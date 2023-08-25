@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import clsx from "clsx";
-import React from "react";
+import React, { useEffect } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
@@ -83,21 +83,26 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
   const watchPay = watch("pay");
   const watchPayback = watch("payback");
 
+  useEffect(() => {
+    if (isNoriuchi) {
+      setValue("machine", "-");
+      setValue("rate", "7");
+    }
+  }, [watchKind]);
+
   const isWin = Number(watchPayback) - Number(watchPay) > 0;
 
-  const isPachinko = () => {
-    return watchKind === "pachinko";
-  };
+  const isNoriuchi = watchKind === "noriuchi";
 
   const filteredMachineMaster = () => {
     return machineMaster!.filter((machineMaster) => {
-      return machineMaster.is_pachinko === isPachinko();
+      return machineMaster.kind === watchKind;
     });
   };
 
   const filteredRateMaster = () => {
     return rateMaster!.filter((rateMaster) => {
-      return rateMaster.is_pachinko === isPachinko();
+      return rateMaster.kind === watchKind;
     });
   };
 
@@ -174,6 +179,7 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
             options={filteredMachineMaster()!.map(
               (machineMaster) => machineMaster.name,
             )}
+            disabled={isNoriuchi}
             {...field}
             renderInput={(params: any) => (
               <TextField
@@ -195,6 +201,7 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
     <Input
       id="machine"
       className={clsx("w-full", !errors.machine && "mb-4")}
+      disabled={isNoriuchi}
       {...register("machine", { required: true })}
     />
   );
@@ -227,6 +234,8 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
                 <ToggleButton value="pachinko">パチンコ</ToggleButton>
 
                 <ToggleButton value="slot">スロット</ToggleButton>
+
+                <ToggleButton value="noriuchi">乗り打ち</ToggleButton>
               </ToggleButtonGroup>
             );
           }}
@@ -252,6 +261,7 @@ export const PachisloForm = ({ data = undefined, date, onUpdated }: Props) => {
               labelId="rate"
               id="rate"
               label="レート"
+              disabled={isNoriuchi}
               {...field}
               onChange={(event) => {
                 setValue("rate", event.target.value);

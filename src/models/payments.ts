@@ -24,7 +24,7 @@ export interface PaymentsResponse {
     machine: {
       created_at: string | null;
       id: number;
-      is_pachinko: boolean;
+      kind: string;
       name: string;
     };
     shop: {
@@ -36,7 +36,7 @@ export interface PaymentsResponse {
       created_at: string | null;
       id: number;
       name: string;
-      is_pachinko: boolean;
+      kind: string;
     };
   } | null;
   id: number;

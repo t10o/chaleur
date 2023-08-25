@@ -103,19 +103,19 @@ export interface Database {
         Row: {
           created_at: string | null
           id: number
-          is_pachinko: boolean
+          kind: string
           name: string
         }
         Insert: {
           created_at?: string | null
           id?: number
-          is_pachinko: boolean
+          kind: string
           name: string
         }
         Update: {
           created_at?: string | null
           id?: number
-          is_pachinko?: boolean
+          kind?: string
           name?: string
         }
         Relationships: []
@@ -245,6 +245,96 @@ export interface Database {
         }
         Relationships: []
       }
+      race_detail: {
+        Row: {
+          age: number
+          arrival_order: number
+          class: string
+          corner: string
+          course_id: number
+          course_kind: string
+          course_state: string
+          created_at: string
+          date: string
+          handicap: number
+          horse_name: string
+          horse_number: number
+          id: number
+          jockey: string
+          odds: number
+          passage_order: string
+          population: number
+          race_id: number
+          race_name: string
+          racecourse: string
+          racecourse_name: string
+          sex: string
+          time: string
+          up: number
+          weather: string
+          weight: number
+          weight_change: number
+        }
+        Insert: {
+          age: number
+          arrival_order: number
+          class: string
+          corner: string
+          course_id: number
+          course_kind: string
+          course_state: string
+          created_at?: string
+          date: string
+          handicap: number
+          horse_name: string
+          horse_number: number
+          id?: number
+          jockey: string
+          odds: number
+          passage_order: string
+          population: number
+          race_id: number
+          race_name: string
+          racecourse: string
+          racecourse_name: string
+          sex: string
+          time: string
+          up: number
+          weather: string
+          weight: number
+          weight_change: number
+        }
+        Update: {
+          age?: number
+          arrival_order?: number
+          class?: string
+          corner?: string
+          course_id?: number
+          course_kind?: string
+          course_state?: string
+          created_at?: string
+          date?: string
+          handicap?: number
+          horse_name?: string
+          horse_number?: number
+          id?: number
+          jockey?: string
+          odds?: number
+          passage_order?: string
+          population?: number
+          race_id?: number
+          race_name?: string
+          racecourse?: string
+          racecourse_name?: string
+          sex?: string
+          time?: string
+          up?: number
+          weather?: string
+          weight?: number
+          weight_change?: number
+        }
+        Relationships: []
+      }
       racecourse: {
         Row: {
           created_at: string | null
@@ -267,19 +357,19 @@ export interface Database {
         Row: {
           created_at: string | null
           id: number
-          is_pachinko: boolean
+          kind: string
           name: string
         }
         Insert: {
           created_at?: string | null
           id?: number
-          is_pachinko: boolean
+          kind: string
           name: string
         }
         Update: {
           created_at?: string | null
           id?: number
-          is_pachinko?: boolean
+          kind?: string
           name?: string
         }
         Relationships: []
