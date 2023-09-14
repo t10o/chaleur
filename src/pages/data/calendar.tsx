@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 
 import { ContentLayout } from "@/components/layouts";
-import { Others } from "@/features/others";
+import { Calendar } from "@/features/data/components/Calendar/Calendar";
 import { useUser } from "@/hooks/use-user";
 import { AuthState, authState } from "@/stores/auth";
 import { redirect } from "@/utils/redirect";
@@ -12,7 +12,7 @@ interface Props {
   user: User;
 }
 
-export default function RankingPage({ user }: Props) {
+export default function DataCalendarPage({ user }: Props) {
   const { user: loginUser } = useUser(user.id);
   const setUser = useSetRecoilState<AuthState>(authState);
 
@@ -27,8 +27,8 @@ export default function RankingPage({ user }: Props) {
   }, [loginUser]);
 
   return (
-    <ContentLayout pageTitle="Others">
-      <Others />
+    <ContentLayout pageTitle="Calendar">
+      <Calendar />
     </ContentLayout>
   );
 }

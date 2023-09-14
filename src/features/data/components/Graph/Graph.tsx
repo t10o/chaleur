@@ -1,11 +1,11 @@
 import clsx from "clsx";
 
-export const Others = () => {
+export const Graph = () => {
   return (
     <div className={clsx("flex", "justify-center", "items-center")}>
-      <div>工事中...🚧</div>
+      <div>Coming Soon...</div>
     </div>
   );
 };
 
-Others.displayName = "Others";
+Graph.displayName = "Graph";

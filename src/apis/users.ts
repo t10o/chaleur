@@ -16,12 +16,18 @@ export const fetchUser = async (userId: string) => {
 export const insertUser = async (
   nickname: string,
   like: string,
-  userId: string
+  userId: string,
 ) => {
   const { data, error } = await supabase
     .from("general_users")
     .insert({ nickname: nickname, like: like, user_id: userId })
     .select();
+
+  return { data, error };
+};
+
+export const fetchUsers = async () => {
+  const { data, error } = await supabase.from("general_users").select("*");
 
   return { data, error };
 };
