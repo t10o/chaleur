@@ -16,7 +16,7 @@ export const MENUS = [
     href: "/news",
   },
   {
-    name: "Others",
-    href: "/others",
+    name: "Data",
+    href: "/data",
   },
 ];
